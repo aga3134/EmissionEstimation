@@ -1,5 +1,5 @@
 //==============Responsive================
-$pc-media: 1024px;
+$pc-media: 800px;
 @mixin pc-width() {
     @media only screen and (min-width: $pc-media) {
         @content;
@@ -13,4 +13,94 @@ html, body {
 * {
     box-sizing: border-box;
     font-family: "微軟正黑體", "Microsoft JhengHei";
+}
+
+.center{
+    display: block;
+    margin: auto;
+    clear: both;
+    text-align: center;
+}
+
+.h-scroll{
+  margin: 0px 10px;
+  width: calc(100% - 20px);
+  overflow-x: auto;
+}
+
+.content-container {
+    max-width: 75em;
+    margin: auto;
+    padding: 0px;
+    clear: both;
+}
+
+#app{
+	width: 100%;
+	height: 100%;
+}
+
+//================topbar=======================
+.topbar{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 60px;
+	width: 100%;
+	padding: 10px;
+	background-color: #EAE1FF;
+	border-bottom: 1px solid rgb(150,150,150);
+	.title{
+		text-align: center;
+		font-size: 1.5em;
+		margin: 0px;
+		font-weight: bold;
+	}
+}
+.top-padding{
+	height: 60px;
+}
+
+//==================dataMap=====================
+#dataMap{
+	border-right: 1px solid rgb(150,150,150);
+	background-color: #eeeeee;
+	display: inline-block;
+	width: calc(100%);
+	height: calc(100% - 120px);
+	margin: 0px;
+	@include pc-width{
+		width: calc(50%);
+	}
+}
+
+//=================dataTable=================
+#dataTable{
+	background-color: #dddddd;
+	display: inline-block;
+	width: calc(100%);
+	height: calc(100% - 120px);
+	margin: 0px;
+	overflow: auto;
+	@include pc-width{
+		width: calc(50%);
+	}
+}
+
+//===============control-bar==================
+.control-bar{
+	border-top: 1px solid rgb(250,250,250);
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	height: 60px;
+	width: 100%;
+	padding: 10px;
+	background-color: #D8E8CA;
+	input{
+		padding: 5px;
+	}
+	select{
+		padding: 5px;
+	}
 }
