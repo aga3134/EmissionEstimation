@@ -47,7 +47,7 @@
 
 			<div class="control-bar center">
 				資料選擇: <select v-model="sourceSelect" v-on:change="ChangeSource">
-					<option v-for="source in sourceList">
+					<option v-for="source in sourceList" v-bind:value="source.value">
 						{{source.name}}
 					</option>
 				</select>

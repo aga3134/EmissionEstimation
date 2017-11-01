@@ -16,10 +16,10 @@ $reqHour = $_GET["hour"];
 $minTime = "$reqDate $reqHour:00:00";
 $maxTime = "$reqDate $reqHour:59:59";
 
-$sql = "SELECT * FROM PowerGens WHERE time >= '$minTime' AND time < '$maxTime'";
+$sql = "SELECT * FROM TrafficFlow WHERE time >= '$minTime' AND time < '$maxTime'";
 if(array_key_exists("type",$_GET)){
 	$type = $_GET["type"];
-	$sql .= "AND stationID LIKE '$type%'";
+	$sql .= "AND type = '$type'";
 }
 
 $result = $conn->query($sql);

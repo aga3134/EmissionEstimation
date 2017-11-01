@@ -16,10 +16,10 @@ $reqHour = $_GET["hour"];
 $minTime = "$reqDate $reqHour:00:00";
 $maxTime = "$reqDate $reqHour:59:59";
 
-$sql = "SELECT * FROM PowerGens WHERE time >= '$minTime' AND time < '$maxTime'";
-if(array_key_exists("type",$_GET)){
-	$type = $_GET["type"];
-	$sql .= "AND stationID LIKE '$type%'";
+$sql = "SELECT * FROM CEMSData WHERE time >= '$minTime' AND time < '$maxTime'";
+if(array_key_exists("item",$_GET)){
+	$item = $_GET["item"];
+	$sql .= "AND item = '$item'";
 }
 
 $result = $conn->query($sql);
