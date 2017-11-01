@@ -35,9 +35,33 @@ html, body {
     clear: both;
 }
 
+@mixin bt{
+	display: inline-block;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+//================app=======================
 #app{
 	width: 100%;
 	height: 100%;
+}
+
+.filter-bar{
+	padding: 0px 10px;
+	input{
+		position: relative;
+		top: -1px;
+		padding: 5px;
+	}
+	.clickBt{
+		@include bt;
+		margin: 5px 0px;
+		background-color: #aaaaaa;
+		&:hover{
+			background-color: #bbbbbb;
+		}
+	}
 }
 
 //================topbar=======================
@@ -51,19 +75,36 @@ html, body {
 	background-color: #EAE1FF;
 	border-bottom: 1px solid rgb(150,150,150);
 	.title{
-		text-align: center;
 		font-size: 1.5em;
-		margin: 0px;
+		margin: 0px 20px;
 		font-weight: bold;
 	}
+	ul{
+		position: absolute;
+		top: 0px;
+		right: 20px;
+		li{
+			cursor: pointer;
+			padding: 10px 20px 5px 20px;
+			display: inline-block;
+			color: #555555;
+			&:hover{
+				color: #7A91BC;
+				border-bottom: 3px solid #4871BC;
+			}
+		}
+	}
 }
-.top-padding{
+.bar-padding{
 	height: 60px;
 }
 
 //==================dataMap=====================
 #dataMap{
-	border-right: 1px solid rgb(150,150,150);
+	border: none;
+	@include pc-width{
+		border-right: 1px solid rgb(150,150,150);
+	}
 	background-color: #eeeeee;
 	display: inline-block;
 	width: calc(100%);
@@ -76,7 +117,7 @@ html, body {
 
 //=================dataTable=================
 #dataTable{
-	background-color: #dddddd;
+	background-color: #FFFFFF;
 	display: inline-block;
 	width: calc(100%);
 	height: calc(100% - 120px);
@@ -85,6 +126,46 @@ html, body {
 	@include pc-width{
 		width: calc(50%);
 	}
+	.data-option{
+		.title{
+			display: inline-block;
+			margin: 10px 0px;
+		}
+		select{
+			padding: 5px;
+		}
+	}
+	.info{
+		margin: 0px;
+	}
+	table{
+		margin: 10px 0px;
+        border-collapse: collapse;
+        vertical-align: top;
+        min-width: 100%;
+        caption{
+            padding: 5px;
+        }
+        th{
+            padding: 10px;
+            background-color: #97BCAB;
+            border: 1px solid #9E9E9E;
+        }
+        tr{
+        	&:nth-child(even) {
+		        background-color: #eeeeee;
+		    }
+		    &:nth-child(odd) {
+		        background-color: #ffffff;
+		    }
+        }
+        td{
+        	min-width: 100px;
+            padding: 10px;
+            color: black;
+            text-align: left;
+        }
+    }
 }
 
 //===============control-bar==================

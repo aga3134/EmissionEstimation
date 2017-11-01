@@ -8,7 +8,10 @@ function ConnectMySQL(){
 	if ($conn->connect_error) {
 	    return NULL;
 	}
-	else return $conn;
+	else{
+		$conn->query("SET NAMES UTF8");
+		return $conn;
+	}
 }
 
 ?>
