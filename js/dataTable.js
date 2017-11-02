@@ -5,7 +5,7 @@ var g_DT = function(){
   var cemsItem = {};
 
   var InitSites = function(){
-    $.get("/data/powerStation.php", function(data){
+    $.get("data/powerStation.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
       for(var i=0;i<json.length;i++){
@@ -17,7 +17,7 @@ var g_DT = function(){
       //console.log(powerStation);
     });
 
-    $.get("/data/trafficSite.php", function(data){
+    $.get("data/trafficSite.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
       for(var i=0;i<json.length;i++){
@@ -27,7 +27,7 @@ var g_DT = function(){
       //console.log(trafficSite);
     });
 
-    $.get("/data/cemsComp.php", function(data){
+    $.get("data/cemsComp.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
       for(var i=0;i<json.length;i++){
@@ -39,7 +39,7 @@ var g_DT = function(){
       //console.log(cemsComp);
     });
 
-    $.get("/data/cemsItem.php", function(data){
+    $.get("data/cemsItem.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
       for(var i=0;i<json.length;i++){
