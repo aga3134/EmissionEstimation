@@ -27,6 +27,7 @@ var app = new Vue({
   	this.hourSelect = g_Util.DateToString(now,"HH");
     //this.dateSelect = "2017-10-27";
     //this.hourSelect = "15";
+    g_DT.InitSites(this);
     this.ChangeSource();
   },
   methods: {

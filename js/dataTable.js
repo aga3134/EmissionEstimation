@@ -4,7 +4,7 @@ var g_DT = function(){
   var cemsComp = {"KHH":{},"TXG":{},"ILA":{},"CYQ":{},"TNN":{},"YUN":{},"CHA":{},"TAO":{},"TPQ":{},"TPE":{},"HSQ":{}};
   var cemsItem = {};
 
-  var InitSites = function(){
+  var InitSites = function(app){
     $.get("data/powerStation.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
@@ -15,39 +15,38 @@ var g_DT = function(){
         }
       }
       //console.log(powerStation);
-    });
-
-    $.get("data/trafficSite.php", function(data){
-      if(!data) return;
-      json = JSON.parse(data);
-      for(var i=0;i<json.length;i++){
-        var site = json[i];
-        trafficSite[site.id] = site;
-      }
-      //console.log(trafficSite);
-    });
-
-    $.get("data/cemsComp.php", function(data){
-      if(!data) return;
-      json = JSON.parse(data);
-      for(var i=0;i<json.length;i++){
-        var comp = json[i];
-        if(comp.city in cemsComp){
-          cemsComp[comp.city][comp.id] = comp;
+      $.get("data/trafficSite.php", function(data){
+        if(!data) return;
+        json = JSON.parse(data);
+        for(var i=0;i<json.length;i++){
+          var site = json[i];
+          trafficSite[site.id] = site;
         }
-      }
-      //console.log(cemsComp);
+        //console.log(trafficSite);
+        $.get("data/cemsComp.php", function(data){
+          if(!data) return;
+          json = JSON.parse(data);
+          for(var i=0;i<json.length;i++){
+            var comp = json[i];
+            if(comp.city in cemsComp){
+              cemsComp[comp.city][comp.id] = comp;
+            }
+          }
+          //console.log(cemsComp);
+          $.get("data/cemsItem.php", function(data){
+            if(!data) return;
+            json = JSON.parse(data);
+            for(var i=0;i<json.length;i++){
+              var item = json[i];
+              cemsItem[item.id] = item;
+            }
+            //console.log(cemsItem);
+            app.UpdateData();
+          });
+        });
+      });
     });
 
-    $.get("data/cemsItem.php", function(data){
-      if(!data) return;
-      json = JSON.parse(data);
-      for(var i=0;i<json.length;i++){
-        var item = json[i];
-        cemsItem[item.id] = item;
-      }
-      //console.log(cemsItem);
-    });
   }
 
   var LoadPowerGen = function(app){
@@ -178,9 +177,10 @@ var g_DT = function(){
   };
 
   //==============init=================
-  InitSites();
+  
 
   return {
+    InitSites: InitSites,
     LoadPowerGen: LoadPowerGen,
     LoadTraffic: LoadTraffic,
     LoadCEMS: LoadCEMS
