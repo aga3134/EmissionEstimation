@@ -88,6 +88,7 @@ html, body {
       width: calc(50%); } }
 
 #dataTable {
+  position: relative;
   background-color: #FFFFFF;
   display: inline-block;
   width: calc(100%);
@@ -104,6 +105,8 @@ html, body {
     padding: 5px; }
   #dataTable .info {
     margin: 0px; }
+  #dataTable .long {
+    min-width: 300px; }
   #dataTable table {
     margin: 10px 0px;
     border-collapse: collapse;
@@ -124,6 +127,24 @@ html, body {
       padding: 10px;
       color: black;
       text-align: left; }
+  #dataTable .loading-overlay {
+    background-color: rgba(50, 50, 50, 0.2);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%; }
+    #dataTable .loading-overlay img {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+      -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
+      width: 100px; }
 
 .control-bar {
   border-top: 1px solid #fafafa;

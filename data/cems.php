@@ -11,16 +11,28 @@ if(!array_key_exists("date",$_GET) || !array_key_exists("hour",$_GET)){
 	return"[]";
 }
 
+$comp = array();
+if(array_key_exists("city",$_GET)){
+	$city = $_GET["city"];
+	$sql = "SELECT id FROM CEMSComps WHERE city = '$city'";
+	$result = $conn->query($sql);
+	if(!$result){
+		$conn->close();
+		return"[]";
+	}
+	while($row = $result->fetch_assoc()) {
+	    $comp[] = $row["id"];
+	}
+}
+
 $reqDate = $_GET["date"];
 $reqHour = $_GET["hour"];
 $minTime = "$reqDate $reqHour:00:00";
 $maxTime = "$reqDate $reqHour:59:59";
+$ids = join("','",$comp); 
 
-$sql = "SELECT * FROM CEMSData WHERE time >= '$minTime' AND time < '$maxTime'";
-if(array_key_exists("item",$_GET)){
-	$item = $_GET["item"];
-	$sql .= "AND item = '$item'";
-}
+$sql = "SELECT * FROM CEMSData WHERE time >= '$minTime' AND time < '$maxTime' AND c_no in ('$ids')";
+
 
 $result = $conn->query($sql);
 

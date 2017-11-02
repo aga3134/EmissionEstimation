@@ -1,4 +1,4 @@
-var util = (function(){
+var g_Util = (function(){
 	function PadLeft(val, totalLen, ch){
 		var  len = (totalLen - String(val).length)+1;
 		return len > 0? new Array(len).join(ch || '0')+val : val;

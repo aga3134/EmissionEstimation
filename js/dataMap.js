@@ -1,4 +1,4 @@
-var dm = (function(){
+var g_DM = (function(){
 	
 	function InitMap() {
 		var loc = {lat: 23.682094, lng: 120.7764642, zoom: 7};
@@ -13,6 +13,7 @@ var dm = (function(){
 		});
 	}
 
+	//==============init=================
 	google.maps.event.addDomListener(window, 'load', InitMap);
 
 	return {};

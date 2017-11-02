@@ -16,17 +16,17 @@ var app = new Vue({
       opList: [],
       keys: [],
       rows: [],
-      length: 0
+      length: 0,
+      loading: false
     }
   },
   created: function () {
   	var now = new Date();
   	this.sourceSelect = this.sourceList[0].value;
-  	this.dateSelect = util.DateToString(now,"YYYY-MM-dd");
-  	this.hourSelect = util.DateToString(now,"HH");
+  	this.dateSelect = g_Util.DateToString(now,"YYYY-MM-dd");
+  	this.hourSelect = g_Util.DateToString(now,"HH");
     //this.dateSelect = "2017-10-27";
     //this.hourSelect = "15";
-
     this.ChangeSource();
   },
   methods: {
@@ -63,16 +63,19 @@ var app = new Vue({
           UpdateOP(op);
           break;
         case "cems":
-          this.dataTable.opTitle = "監測項目:";
-          $.get("/data/cemsItem.php", function(data){
-            if(!data) return;
-            var json = JSON.parse(data);
-            var op = [];
-            for(var i=0;i<json.length;i++){
-              op.push({name:json[i].desp, value:json[i].id});
-            }
-            UpdateOP(op);
-          });
+          this.dataTable.opTitle = "城市:";
+          op.push({name: "高雄", value: "KHH"});
+          op.push({name: "台中", value: "TXG"});
+          op.push({name: "宜蘭", value: "ILA"});
+          op.push({name: "嘉義", value: "CYQ"});
+          op.push({name: "台南", value: "TNN"});
+          op.push({name: "雲林", value: "YUN"});
+          op.push({name: "彰化", value: "CHA"});
+          op.push({name: "桃園", value: "TAO"});
+          op.push({name: "新北", value: "TPQ"});
+          op.push({name: "台北", value: "TPE"});
+          op.push({name: "新竹", value: "HSQ"});
+          UpdateOP(op);
           break;
       }
       
@@ -92,9 +95,9 @@ var app = new Vue({
     },
     UpdateData: function(){
       switch(this.sourceSelect){
-        case "power": dt.LoadPowerGen(this); break;
-        case "traffic": dt.LoadTraffic(this); break;
-        case "cems": dt.LoadCEMS(this); break;
+        case "power": g_DT.LoadPowerGen(this); break;
+        case "traffic": g_DT.LoadTraffic(this); break;
+        case "cems": g_DT.LoadCEMS(this); break;
       }
     }
   }

@@ -32,15 +32,19 @@
 			 		<table>
 			 			<thead>
 				 			<tr>
-				 				<th v-for="key in dataTable.keys">{{key}}</th>
+				 				<th v-for="key in dataTable.keys"
+				 					v-bind:class="{long: key.isLong}">{{key.name}}</th>
 				 			</tr>
 			 			</thead>
 			 			<tbody>
 				 			<tr v-for="row in dataTable.rows">
-				 				<td v-for="key in dataTable.keys">{{row[key]}}</td>
+				 				<td v-for="key in dataTable.keys">{{row[key.value]}}</td>
 				 			</tr>
 			 			</tbody>
 			 		</table>
+		 		</div>
+		 		<div class="loading-overlay" v-if="dataTable.loading">
+		 			<img src="/image/loading.gif">
 		 		</div>
 		 	</div>
 		 	<div class="bar-padding"></div>
