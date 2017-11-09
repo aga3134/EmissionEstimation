@@ -160,7 +160,7 @@ var g_DT = function(){
       for(var i=0;i<json.length;i++){
         var d = json[i];
         var site = comps[d.c_no];
-        var item = cemsItem[d.item];
+        var item = cemsItem[d.item.trim()];
         if(!site || !item) continue;
         var record = {};
         record["compName"] = site.name;
