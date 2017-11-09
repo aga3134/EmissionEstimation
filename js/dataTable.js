@@ -1,8 +1,10 @@
 var g_DT = function(){
   var powerStation = {"coal":{},"cogen":{},"ippcoal":{},"lng":{},"ipplng":{},"oil":{},"diesel":{}};
   var trafficSite = {};
-  var cemsComp = {"KHH":{},"TXG":{},"ILA":{},"CYQ":{},"TNN":{},"YUN":{},"CHA":{},"TAO":{},"TPQ":{},"TPE":{},"HSQ":{}};
+  var cemsComp = {"高雄市":{},"台中市":{},"宜蘭縣":{},"嘉義縣":{},"台南市":{},"雲林縣":{},"彰化縣":{},
+    "桃園市":{},"新北市":{},"台北市":{},"新竹縣":{},"基隆市":{},"花蓮縣":{},"苗栗縣":{}};
   var cemsItem = {};
+  var cemsStatus = {};
 
   var InitSites = function(app){
     $.get("data/powerStation.php", function(data){
@@ -43,6 +45,18 @@ var g_DT = function(){
             //console.log(cemsItem);
             app.UpdateData();
           });
+
+          $.get("data/cemsStatus.php", function(data){
+            if(!data) return;
+            json = JSON.parse(data);
+            for(var i=0;i<json.length;i++){
+              var status = json[i];
+              cemsStatus[status.statusCode] = status;
+            }
+            //console.log(cemsStatus);
+          });
+
+
         });
       });
     });
@@ -154,7 +168,8 @@ var g_DT = function(){
         {name:"裝置編號",value:"p_no"},
         {name:"項目",value:"itemName"},
         {name:"數值",value:"value"},
-        {name:"時間",value:"time"}];
+        {name:"時間",value:"time"},
+        {name:"狀態",value:"status"}];
       var rowArr = [];
       var comps = cemsComp[app.dataTable.opSelect];
       for(var i=0;i<json.length;i++){
@@ -168,6 +183,7 @@ var g_DT = function(){
         record["itemName"] = item.desp;
         record["value"] = d.value+" ("+item.unit+")";
         record["time"] = g_Util.DateToString(new Date(d.time),"HH:mm");
+        record["status"] = cemsStatus[d.statusCode].desp;
         rowArr.push(record);
       }
       app.dataTable.keys = keyArr;

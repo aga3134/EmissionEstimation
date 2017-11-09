@@ -65,17 +65,20 @@ var app = new Vue({
           break;
         case "cems":
           this.dataTable.opTitle = "城市:";
-          op.push({name: "高雄", value: "KHH"});
-          op.push({name: "台中", value: "TXG"});
-          op.push({name: "宜蘭", value: "ILA"});
-          op.push({name: "嘉義", value: "CYQ"});
-          op.push({name: "台南", value: "TNN"});
-          op.push({name: "雲林", value: "YUN"});
-          op.push({name: "彰化", value: "CHA"});
-          op.push({name: "桃園", value: "TAO"});
-          op.push({name: "新北", value: "TPQ"});
-          op.push({name: "台北", value: "TPE"});
-          op.push({name: "新竹", value: "HSQ"});
+          op.push({name: "高雄市", value: "高雄市"});
+          op.push({name: "台中市", value: "台中市"});
+          op.push({name: "宜蘭縣", value: "宜蘭縣"});
+          op.push({name: "嘉義縣", value: "嘉義縣"});
+          op.push({name: "台南市", value: "台南市"});
+          op.push({name: "雲林縣", value: "雲林縣"});
+          op.push({name: "彰化縣", value: "彰化縣"});
+          op.push({name: "桃園市", value: "桃園市"});
+          op.push({name: "新北市", value: "新北市"});
+          op.push({name: "台北市", value: "台北市"});
+          op.push({name: "新竹縣", value: "新竹縣"});
+          op.push({name: "基隆市", value: "基隆市"});
+          op.push({name: "花蓮縣", value: "花蓮縣"});
+          op.push({name: "苗栗縣", value: "苗栗縣"});
           UpdateOP(op);
           break;
       }
