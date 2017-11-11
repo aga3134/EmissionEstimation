@@ -43,7 +43,7 @@ var g_DT = function(){
               cemsItem[item.id] = item;
             }
             //console.log(cemsItem);
-            app.UpdateData();
+            app.UpdateTable();
           });
 
           $.get("data/cemsStatus.php", function(data){

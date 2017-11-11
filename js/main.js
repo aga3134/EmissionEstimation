@@ -28,6 +28,7 @@ var app = new Vue({
     //this.dateSelect = "2017-10-27";
     //this.hourSelect = "15";
     g_DT.InitSites(this);
+    g_DM.InitSites(this);
     this.ChangeSource();
   },
   methods: {
@@ -39,7 +40,7 @@ var app = new Vue({
         if(op.length > 0) this.dataTable.opSelect = op[0].value;
         else this.dataTable.opSelect = "";
         this.dataTable.opList = op;
-        this.UpdateData();
+        this.UpdateTable();
       }.bind(this);
 
       switch(this.sourceSelect){
@@ -86,23 +87,46 @@ var app = new Vue({
   	},
   	ChangeDate: function(){
   		console.log("change date: "+this.dateSelect);
-      this.UpdateData();
-      
+      this.UpdateTable();
+      this.UpdateMap();
   	},
   	ChangeHour: function(){
   		console.log("change hour: "+this.hourSelect);
-      this.UpdateData();
+      this.UpdateTable();
+      this.UpdateMap();
   	},
     ChangeDataOption: function(){
       console.log("change data option"+this.dataTable.opSelect);
-      this.UpdateData();
+      this.UpdateTable();
+      this.UpdateMap();
     },
-    UpdateData: function(){
+    UpdateTable: function(){
       switch(this.sourceSelect){
-        case "power": g_DT.LoadPowerGen(this); break;
-        case "traffic": g_DT.LoadTraffic(this); break;
-        case "cems": g_DT.LoadCEMS(this); break;
+        case "power":
+          g_DT.LoadPowerGen(this);
+          break;
+        case "traffic":
+          g_DT.LoadTraffic(this);
+          break;
+        case "cems":
+          g_DT.LoadCEMS(this);
+          break;
       }
+    },
+    UpdateMap: function(){
+      switch(this.sourceSelect){
+        case "power":
+          g_DM.UpdatePower(this);
+          break;
+        case "traffic":
+          g_DM.UpdateTraffic(this);
+          break;
+        case "cems":
+          g_DM.UpdateCEMS(this);
+          break;
+      }
+      g_DM.UpdateAirData(this);
+      g_DM.UpdateWeather(this);
     }
   }
 });
