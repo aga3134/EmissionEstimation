@@ -5,6 +5,7 @@ var g_DT = function(){
     "桃園市":{},"新北市":{},"台北市":{},"新竹縣":{},"基隆市":{},"花蓮縣":{},"苗栗縣":{}};
   var cemsItem = {};
   var cemsStatus = {};
+  var mapData = [];
 
   var InitSites = function(app){
     $.get("data/powerStation.php", function(data){
@@ -63,6 +64,94 @@ var g_DT = function(){
 
   }
 
+  function GenMapPowerData(app,data){
+    mapData = [];
+    if(!data || app.sourceSelect != "power") return;
+
+    for(var key in powerStation){
+      var powerType = powerStation[key];
+      for(var id in powerType){
+        var station = powerType[id];
+        mapData[station.id] = station;
+        mapData[station.id].genSum = 0;
+        mapData[station.id].genNum = 0;
+        mapData[station.id].type = key;
+      }
+    }
+
+    for(var i=0;i<data.length;i++){
+      var d = data[i];
+      var station = mapData[d.stationID];
+      if(!station) continue;
+      station.genSum += parseFloat(d.powerGen);
+      station.genNum++;
+    }
+    //console.log(mapData);
+    g_DM.UpdatePower(app, mapData);
+  }
+
+  function GenMapTrafficData(app,data){
+    mapData = [];
+    if(!data || app.sourceSelect != "traffic") return;
+
+    for(var key in trafficSite){
+      var site = trafficSite[key];
+      mapData[site.id] = site;
+      mapData[site.id].dir = site.id[site.id.length-1];
+      mapData[site.id].totalAmount = 0;
+      mapData[site.id].totalNum = 0;
+      mapData[site.id].type = app.dataTable.opSelect;
+    }
+
+    for(var i=0;i<data.length;i++){
+      var d = data[i];
+      var site = mapData[d.siteID];
+      if(!site) continue;
+      site.totalAmount += parseInt(d.amount);
+      site.totalNum++;
+    }
+    //console.log(mapData);
+    g_DM.UpdateTraffic(app, mapData);
+  }
+
+  function GenMapCEMSData(app,data){
+    mapData = [];
+    if(!data || app.sourceSelect != "cems") return;
+
+    var compArr = cemsComp[app.dataTable.opSelect];
+    for(var key in compArr){
+      var comp = compArr[key];
+      mapData[comp.id] = comp;
+      mapData[comp.id].p_no = [];
+      mapData[comp.id].city = app.dataTable.opSelect;
+    }
+
+    for(var i=0;i<data.length;i++){
+      var d = data[i];
+      var comp = mapData[d.c_no];
+      if(!comp) continue;
+      if(comp.p_no[d.p_no]){
+        var p = comp.p_no[d.p_no];
+        if(p[d.item]){
+          p[d.item].valueSum += parseFloat(d.value);
+          p[d.item].valueNum++;
+        }
+        else{
+          var item = {valueSum: parseFloat(d.value), valueNum: 1};
+          p[d.item] = item;
+        }
+      }
+      else{
+        var p = {};
+        var item = {valueSum: parseFloat(d.value), valueNum: 1};
+        p[d.item] = item;
+        comp.p_no[d.p_no] = p;
+      }
+    }
+    //console.log(mapData);
+    g_DM.UpdateCEMS(app, mapData);
+  }
+
   var LoadPowerGen = function(app){
     app.dataTable.loading = true;
     var url = "data/powerGen.php";
@@ -76,19 +165,21 @@ var g_DT = function(){
         app.dataTable.keys = [];
         app.dataTable.rows = [];
         app.dataTable.loading = false;
+        mapData = [];
         return;
       }
-      var genData = JSON.parse(data);
-      app.dataTable.length = genData.length;
+      var json = JSON.parse(data);
+      GenMapPowerData(app,json);
+      app.dataTable.length = json.length;
       var keyArr = [{name:"機組名稱",value:"name"},
-        {name:"淨發電量(MV)",value:"gen"},
+        {name:"淨發電量(MW)",value:"gen"},
         {name:"利用率(%)",value:"percent"},
         {name:"備註",value:"remark"},
         {name:"時間",value:"time"}];
       var rowArr = [];
       var stations = powerStation[app.dataTable.opSelect];
-      for(var i=0;i<genData.length;i++){
-        var d = genData[i];
+      for(var i=0;i<json.length;i++){
+        var d = json[i];
         var station = stations[d.stationID];
         if(!station) continue;
         var record = {};
@@ -118,9 +209,11 @@ var g_DT = function(){
         app.dataTable.keys = [];
         app.dataTable.rows = [];
         app.dataTable.loading = false;
+        mapData = [];
         return;
       }
       var json = JSON.parse(data);
+      GenMapTrafficData(app,json);
       app.dataTable.length = json.length;
 
       var keyArr = [{name:"國道別",value:"highway"},
@@ -160,9 +253,11 @@ var g_DT = function(){
         app.dataTable.keys = [];
         app.dataTable.rows = [];
         app.dataTable.loading = false;
+        mapData = [];
         return;
       }
       var json = JSON.parse(data);
+      GenMapCEMSData(app,json);
       app.dataTable.length = json.length;
       var keyArr = [{name:"公司",value:"compName"},
         {name:"裝置編號",value:"p_no"},

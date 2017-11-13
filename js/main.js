@@ -41,6 +41,7 @@ var app = new Vue({
         else this.dataTable.opSelect = "";
         this.dataTable.opList = op;
         this.UpdateTable();
+        this.UpdateMap();
       }.bind(this);
 
       switch(this.sourceSelect){
@@ -114,17 +115,6 @@ var app = new Vue({
       }
     },
     UpdateMap: function(){
-      switch(this.sourceSelect){
-        case "power":
-          g_DM.UpdatePower(this);
-          break;
-        case "traffic":
-          g_DM.UpdateTraffic(this);
-          break;
-        case "cems":
-          g_DM.UpdateCEMS(this);
-          break;
-      }
       g_DM.UpdateAirData(this);
       g_DM.UpdateWeather(this);
     }

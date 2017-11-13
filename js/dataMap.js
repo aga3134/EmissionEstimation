@@ -5,7 +5,30 @@ var g_DM = (function(){
 	var epaArray = [];
 	var weatherStation = [];
 	var weatherArray = [];
+
+	var powerStation = [];
+	var trafficSite = [];
+	var cemsComp = [];
 	
+	function GetEPARadius(){
+		if(!map) return 2000;
+		var zoom = 11-map.getZoom();
+		if(zoom < 1) zoom = 1;
+		if(zoom > 7) zoom = 7;
+		return 500*Math.pow(2,zoom);
+	}
+
+	function UpdateZoom(){
+		var radius = GetEPARadius();
+		var strokeOpacity = radius>=5000?0:0.5;
+		for(var key in epaArray){
+			epaArray[key].setOptions({
+	    		radius: radius,
+	    		strokeOpacity: strokeOpacity
+	    	});
+		}
+	}
+
 	function InitMap() {
 		var loc = {lat: 23.682094, lng: 120.7764642, zoom: 7};
 		var taiwan = new google.maps.LatLng(loc.lat,loc.lng);
@@ -16,6 +39,11 @@ var g_DM = (function(){
 		  scaleControl: true,
 		  //mapTypeId: google.maps.MapTypeId.SATELLITE
 		  //mapTypeId: google.maps.MapTypeId.TERRAIN
+		});
+
+		map.addListener('zoom_changed', function(){
+			if(map.getZoom() < 5) map.setZoom(5);
+			UpdateZoom();
 		});
 	}
 
@@ -49,9 +77,9 @@ var g_DM = (function(){
 		}
 	}
 
-	
-
 	function UpdateAirData(app){
+		if(Object.keys(epaSite).length == 0) return;
+
 		function AQIValueToColor(v){
 			if(v <= 50) return "#00e800";
 			else if(v <= 100) return "#ffff00";
@@ -71,15 +99,17 @@ var g_DM = (function(){
 				epaArray = [];
 				return;
 			}
+			var radius = GetEPARadius();
 			var epaData = JSON.parse(data);
 			for(var i=0;i<epaData.length;i++){
 				var d = epaData[i];
 				var site = epaSite[d.siteName];
+				if(!site) continue;
 				var pos = {lat: parseFloat(site.lat), lng: parseFloat(site.lng)};
 
 				var circle = new google.maps.Circle({
 					center: pos,
-            		radius: 2000,
+            		radius: radius,
             		strokeColor: "#000000",
 					strokeWeight: 1,
 					strokeOpacity: 0.5,
@@ -95,6 +125,8 @@ var g_DM = (function(){
 	}
 
 	function UpdateWeather(app){
+		if(Object.keys(weatherStation).length == 0) return;
+
 		function GenArrow(loc, wDir, wSpeed, scale){
 			var arrow = [];
 			var theta = wDir*Math.PI/180;
@@ -129,8 +161,8 @@ var g_DM = (function(){
 			var weatherData = JSON.parse(data);
 			for(var i=0;i<weatherData.length;i++){
 				var d = weatherData[i];
-				if(d.wSpeed <= 0) continue;
 				var station = weatherStation[d.stationID];
+				if(!station || d.wSpeed <= 0) continue;
 				var loc = new google.maps.LatLng(parseFloat(station.lat), parseFloat(station.lng));
 
 				var arrow = new google.maps.Polyline({
@@ -146,16 +178,64 @@ var g_DM = (function(){
 	    });
 	}
 
-	function UpdatePower(app){
-
+	function UpdatePower(app, data){
+		console.log(data);
 	}
 
-	function UpdateTraffic(app){
+	function UpdateTraffic(app, data){
+		function GenShape(loc, dir, segLen){
+			var shape = [];
+			switch(dir){
+				case "N":
+					shape[0] = loc;
+					shape[1] = {lat: loc.lat()+segLen, lng: loc.lng()};
+					shape[2] = {lat: loc.lat()+segLen, lng: loc.lng()-0.7*segLen};
+					shape[3] = {lat: loc.lat()+2.5*segLen, lng: loc.lng()+0.5*segLen};
+					shape[4] = {lat: loc.lat()+segLen, lng: loc.lng()+1.7*segLen};
+					shape[5] = {lat: loc.lat()+segLen, lng: loc.lng()+segLen};
+					shape[6] = {lat: loc.lat(), lng: loc.lng()+segLen};
+					shape[7] = loc;
+					break;
+				case "S":
+					shape[0] = loc;
+					shape[1] = {lat: loc.lat()-segLen, lng: loc.lng()};
+					shape[2] = {lat: loc.lat()-segLen, lng: loc.lng()+0.7*segLen};
+					shape[3] = {lat: loc.lat()-2.5*segLen, lng: loc.lng()-0.5*segLen};
+					shape[4] = {lat: loc.lat()-segLen, lng: loc.lng()-1.7*segLen};
+					shape[5] = {lat: loc.lat()-segLen, lng: loc.lng()-segLen};
+					shape[6] = {lat: loc.lat(), lng: loc.lng()-segLen};
+					shape[7] = loc;
+					break;
+			}
+			return shape;
+		}
 
+		CLearDataInMap(trafficSite);
+
+		for(var key in data){
+			var d = data[key];
+			var loc = new google.maps.LatLng(d.lat, d.lng);
+			var size = d.totalAmount*1e-5;
+			
+			var coord = GenShape(loc,d.dir,size);
+			
+			var rect = new google.maps.Polygon({
+				paths: coord,
+				strokeColor: '#000000',
+				strokeWeight: 1,
+				fillOpacity: 0,
+				zIndex: 2,
+				map: map
+			});
+			//rect.listener = rect.addListener('click', clickFn(data,i,time));
+			trafficSite[key] = rect;
+			
+		}
+		
 	}
 
-	function UpdateCEMS(app){
-
+	function UpdateCEMS(app, data){
+		console.log(data);
 	}
 
 	//==============init=================
