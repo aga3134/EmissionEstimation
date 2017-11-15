@@ -7,7 +7,7 @@ var g_DT = function(){
   var cemsStatus = {};
   var mapData = [];
 
-  var InitSites = function(app){
+  var InitSites = function(){
     $.get("data/powerStation.php", function(data){
       if(!data) return;
       json = JSON.parse(data);
@@ -44,7 +44,7 @@ var g_DT = function(){
               cemsItem[item.id] = item;
             }
             //console.log(cemsItem);
-            app.UpdateTable();
+            g_APP.UpdateTable();
           });
 
           $.get("data/cemsStatus.php", function(data){
@@ -64,9 +64,9 @@ var g_DT = function(){
 
   }
 
-  function GenMapPowerData(app,data){
+  function GenMapPowerData(data){
     mapData = [];
-    if(!data || app.sourceSelect != "power") return;
+    if(!data || g_APP.sourceSelect != "power") return;
 
     for(var key in powerStation){
       var powerType = powerStation[key];
@@ -87,12 +87,12 @@ var g_DT = function(){
       station.genNum++;
     }
     //console.log(mapData);
-    g_DM.UpdatePower(app, mapData);
+    g_DM.UpdatePower(mapData);
   }
 
-  function GenMapTrafficData(app,data){
+  function GenMapTrafficData(data){
     mapData = [];
-    if(!data || app.sourceSelect != "traffic") return;
+    if(!data || g_APP.sourceSelect != "traffic") return;
 
     for(var key in trafficSite){
       var site = trafficSite[key];
@@ -100,7 +100,7 @@ var g_DT = function(){
       mapData[site.id].dir = site.id[site.id.length-1];
       mapData[site.id].totalAmount = 0;
       mapData[site.id].totalNum = 0;
-      mapData[site.id].type = app.dataTable.opSelect;
+      mapData[site.id].type = g_APP.dataTable.opSelect;
     }
 
     for(var i=0;i<data.length;i++){
@@ -111,19 +111,19 @@ var g_DT = function(){
       site.totalNum++;
     }
     //console.log(mapData);
-    g_DM.UpdateTraffic(app, mapData);
+    g_DM.UpdateTraffic(mapData);
   }
 
-  function GenMapCEMSData(app,data){
+  function GenMapCEMSData(data){
     mapData = [];
-    if(!data || app.sourceSelect != "cems") return;
+    if(!data || g_APP.sourceSelect != "cems") return;
 
-    var compArr = cemsComp[app.dataTable.opSelect];
+    var compArr = cemsComp[g_APP.dataTable.opSelect];
     for(var key in compArr){
       var comp = compArr[key];
       mapData[comp.id] = comp;
       mapData[comp.id].p_no = [];
-      mapData[comp.id].city = app.dataTable.opSelect;
+      mapData[comp.id].city = g_APP.dataTable.opSelect;
     }
 
     for(var i=0;i<data.length;i++){
@@ -149,35 +149,35 @@ var g_DT = function(){
       }
     }
     //console.log(mapData);
-    g_DM.UpdateCEMS(app, mapData);
+    g_DM.UpdateCEMS(mapData);
   }
 
-  var LoadPowerGen = function(app){
-    app.dataTable.loading = true;
+  var LoadPowerGen = function(){
+    g_APP.dataTable.loading = true;
     var url = "data/powerGen.php";
-    url += "?date="+app.dateSelect;
-    url += "&hour="+app.hourSelect;
-    url += "&type="+app.dataTable.opSelect;
+    url += "?date="+g_APP.dateSelect;
+    url += "&hour="+g_APP.hourSelect;
+    url += "&type="+g_APP.dataTable.opSelect;
     console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
-        app.dataTable.keys = [];
-        app.dataTable.rows = [];
-        app.dataTable.loading = false;
+        g_APP.dataTable.keys = [];
+        g_APP.dataTable.rows = [];
+        g_APP.dataTable.loading = false;
         mapData = [];
         return;
       }
       var json = JSON.parse(data);
-      GenMapPowerData(app,json);
-      app.dataTable.length = json.length;
+      GenMapPowerData(json);
+      g_APP.dataTable.length = json.length;
       var keyArr = [{name:"機組名稱",value:"name"},
         {name:"淨發電量(MW)",value:"gen"},
         {name:"利用率(%)",value:"percent"},
         {name:"備註",value:"remark"},
         {name:"時間",value:"time"}];
       var rowArr = [];
-      var stations = powerStation[app.dataTable.opSelect];
+      var stations = powerStation[g_APP.dataTable.opSelect];
       for(var i=0;i<json.length;i++){
         var d = json[i];
         var station = stations[d.stationID];
@@ -190,31 +190,31 @@ var g_DT = function(){
         record["time"] = g_Util.DateToString(new Date(d.time),"HH:mm");
         rowArr.push(record);
       }
-      app.dataTable.keys = keyArr;
-      app.dataTable.rows = rowArr;
-      app.dataTable.loading = false;
+      g_APP.dataTable.keys = keyArr;
+      g_APP.dataTable.rows = rowArr;
+      g_APP.dataTable.loading = false;
     });
   };
 
-  var LoadTraffic = function(app){
-    app.dataTable.loading = true;
+  var LoadTraffic = function(){
+    g_APP.dataTable.loading = true;
     var url = "data/traffic.php";
-    url += "?date="+app.dateSelect;
-    url += "&hour="+app.hourSelect;
-    url += "&type="+app.dataTable.opSelect;
+    url += "?date="+g_APP.dateSelect;
+    url += "&hour="+g_APP.hourSelect;
+    url += "&type="+g_APP.dataTable.opSelect;
     console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
-        app.dataTable.keys = [];
-        app.dataTable.rows = [];
-        app.dataTable.loading = false;
+        g_APP.dataTable.keys = [];
+        g_APP.dataTable.rows = [];
+        g_APP.dataTable.loading = false;
         mapData = [];
         return;
       }
       var json = JSON.parse(data);
-      GenMapTrafficData(app,json);
-      app.dataTable.length = json.length;
+      GenMapTrafficData(json);
+      g_APP.dataTable.length = json.length;
 
       var keyArr = [{name:"國道別",value:"highway"},
         {name:"交流道",value:"interchange",isLong:true},
@@ -234,31 +234,31 @@ var g_DT = function(){
         record["time"] = g_Util.DateToString(new Date(d.time),"HH:mm");
         rowArr.push(record);
       }
-      app.dataTable.keys = keyArr;
-      app.dataTable.rows = rowArr;
-      app.dataTable.loading = false;
+      g_APP.dataTable.keys = keyArr;
+      g_APP.dataTable.rows = rowArr;
+      g_APP.dataTable.loading = false;
     });
   };
 
-  var LoadCEMS = function(app){
-    app.dataTable.loading = true;
+  var LoadCEMS = function(){
+    g_APP.dataTable.loading = true;
     var url = "data/cems.php";
-    url += "?date="+app.dateSelect;
-    url += "&hour="+app.hourSelect;
-    url += "&city="+app.dataTable.opSelect;
+    url += "?date="+g_APP.dateSelect;
+    url += "&hour="+g_APP.hourSelect;
+    url += "&city="+g_APP.dataTable.opSelect;
     console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
-        app.dataTable.keys = [];
-        app.dataTable.rows = [];
-        app.dataTable.loading = false;
+        g_APP.dataTable.keys = [];
+        g_APP.dataTable.rows = [];
+        g_APP.dataTable.loading = false;
         mapData = [];
         return;
       }
       var json = JSON.parse(data);
-      GenMapCEMSData(app,json);
-      app.dataTable.length = json.length;
+      GenMapCEMSData(json);
+      g_APP.dataTable.length = json.length;
       var keyArr = [{name:"公司",value:"compName"},
         {name:"裝置編號",value:"p_no"},
         {name:"項目",value:"itemName"},
@@ -266,7 +266,7 @@ var g_DT = function(){
         {name:"時間",value:"time"},
         {name:"狀態",value:"status"}];
       var rowArr = [];
-      var comps = cemsComp[app.dataTable.opSelect];
+      var comps = cemsComp[g_APP.dataTable.opSelect];
       for(var i=0;i<json.length;i++){
         var d = json[i];
         var site = comps[d.c_no];
@@ -281,9 +281,9 @@ var g_DT = function(){
         record["status"] = cemsStatus[d.statusCode].desp;
         rowArr.push(record);
       }
-      app.dataTable.keys = keyArr;
-      app.dataTable.rows = rowArr;
-      app.dataTable.loading = false;
+      g_APP.dataTable.keys = keyArr;
+      g_APP.dataTable.rows = rowArr;
+      g_APP.dataTable.loading = false;
     });
   };
 

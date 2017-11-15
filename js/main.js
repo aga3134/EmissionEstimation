@@ -1,5 +1,5 @@
 
-var app = new Vue({
+var g_APP = new Vue({
   el: "#app",
   data: {
   	sourceList: [
@@ -29,7 +29,7 @@ var app = new Vue({
     //this.hourSelect = "15";
     g_DT.InitSites(this);
     g_DM.InitSites(this);
-    this.ChangeSource();
+    //this.ChangeSource();
   },
   methods: {
   	ChangeSource: function(){

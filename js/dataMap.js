@@ -1,5 +1,4 @@
 var g_DM = (function(){
-
 	var map;
 	var epaSite = [];
 	var epaArray = [];
@@ -29,7 +28,7 @@ var g_DM = (function(){
 		}
 	}
 
-	function InitMap() {
+	var InitMap = function() {
 		var loc = {lat: 23.682094, lng: 120.7764642, zoom: 7};
 		var taiwan = new google.maps.LatLng(loc.lat,loc.lng);
 
@@ -45,9 +44,11 @@ var g_DM = (function(){
 			if(map.getZoom() < 5) map.setZoom(5);
 			UpdateZoom();
 		});
+
+		g_APP.UpdateMap();
 	}
 
-	function InitSites(app){
+	function InitSites(){
 		$.get("data/epaSite.php", function(data){
 	        if(!data) return;
 	        json = JSON.parse(data);
@@ -64,7 +65,7 @@ var g_DM = (function(){
 		          weatherStation[station.id] = station;
 		        }
 		        //console.log(weatherStation);
-		        app.UpdateMap();
+		        g_APP.ChangeSource();
 	    	});
     	});
 	}
@@ -77,7 +78,7 @@ var g_DM = (function(){
 		}
 	}
 
-	function UpdateAirData(app){
+	function UpdateAirData(){
 		if(Object.keys(epaSite).length == 0) return;
 
 		function AQIValueToColor(v){
@@ -92,14 +93,15 @@ var g_DM = (function(){
 
 		CLearDataInMap(epaArray);
 		var url = "data/epaData.php";
-	    url += "?date="+app.dateSelect;
-	    url += "&hour="+app.hourSelect;
+	    url += "?date="+g_APP.dateSelect;
+	    url += "&hour="+g_APP.hourSelect;
 	    $.get(url, function(data){
 	    	if(!data){
 				epaArray = [];
 				return;
 			}
 			var radius = GetEPARadius();
+			var strokeOpacity = radius>=5000?0:0.5;
 			var epaData = JSON.parse(data);
 			for(var i=0;i<epaData.length;i++){
 				var d = epaData[i];
@@ -112,7 +114,7 @@ var g_DM = (function(){
             		radius: radius,
             		strokeColor: "#000000",
 					strokeWeight: 1,
-					strokeOpacity: 0.5,
+					strokeOpacity: strokeOpacity,
 					fillColor: AQIValueToColor(d.AQI),
 					fillOpacity: 0.5,
 					zIndex: 2,
@@ -124,7 +126,7 @@ var g_DM = (function(){
 	    });
 	}
 
-	function UpdateWeather(app){
+	function UpdateWeather(){
 		if(Object.keys(weatherStation).length == 0) return;
 
 		function GenArrow(loc, wDir, wSpeed, scale){
@@ -148,8 +150,8 @@ var g_DM = (function(){
 
 		CLearDataInMap(weatherArray);
 		var url = "data/weatherData.php";
-	    url += "?date="+app.dateSelect;
-	    url += "&hour="+app.hourSelect;
+	    url += "?date="+g_APP.dateSelect;
+	    url += "&hour="+g_APP.hourSelect;
 	    $.get(url, function(data){
 	    	if(!data){
 				weatherArray = [];
@@ -163,6 +165,7 @@ var g_DM = (function(){
 				var d = weatherData[i];
 				var station = weatherStation[d.stationID];
 				if(!station || d.wSpeed <= 0) continue;
+
 				var loc = new google.maps.LatLng(parseFloat(station.lat), parseFloat(station.lng));
 
 				var arrow = new google.maps.Polyline({
@@ -178,11 +181,53 @@ var g_DM = (function(){
 	    });
 	}
 
-	function UpdatePower(app, data){
-		console.log(data);
+	function UpdatePower(data){
+		//group by position
+		var locArr = {};
+		for(var key in data){
+			var d = data[key];
+			var key = d.lat+","+d.lng;
+			if(locArr[key]){
+				locArr[key].data.push(d);
+				locArr[key].genSum += d.genSum;
+				locArr[key].genNum += d.genNum;
+			}
+			else{
+				locArr[key] = {};
+				locArr[key].data = [d];
+				locArr[key].genSum = d.genSum;
+				locArr[key].genNum = d.genNum;
+				locArr[key].lat = d.lat;
+				locArr[key].lng = d.lng;
+			}
+		}
+		//draw in map
+		for(key in locArr){
+			var d = locArr[key];
+			//console.log(d);
+			var loc = new google.maps.LatLng(d.lat, d.lng);
+			var size = d.genNum==0?0:(3e-5*d.genSum);
+			var coord = [
+				{lat: loc.lat()-size, lng: loc.lng()-size},
+				{lat: loc.lat()+size, lng: loc.lng()-size},
+				{lat: loc.lat()+size, lng: loc.lng()+size},
+				{lat: loc.lat()-size, lng: loc.lng()+size}
+			];
+			
+			var rect = new google.maps.Polygon({
+				paths: coord,
+				strokeColor: '#000000',
+				strokeWeight: 1,
+				fillOpacity: 0,
+				zIndex: 2,
+				map: map
+			});
+			//rect.listener = rect.addListener('click', clickFn(data,i,time));
+			powerStation[key] = rect;
+		}
 	}
 
-	function UpdateTraffic(app, data){
+	function UpdateTraffic(data){
 		function GenShape(loc, dir, segLen){
 			var shape = [];
 			switch(dir){
@@ -219,6 +264,41 @@ var g_DM = (function(){
 			
 			var coord = GenShape(loc,d.dir,size);
 			
+			var shape = new google.maps.Polygon({
+				paths: coord,
+				strokeColor: '#000000',
+				strokeWeight: 1,
+				fillOpacity: 0,
+				zIndex: 2,
+				map: map
+			});
+			//shape.listener = shape.addListener('click', clickFn(data,i,time));
+			trafficSite[key] = shape;
+			
+		}
+		
+	}
+
+	function UpdateCEMS(data){
+		CLearDataInMap(cemsComp);
+
+		var bounds = new google.maps.LatLngBounds();
+		
+		for(var key in data){
+			var d = data[key];
+			if((d.lat == 0 && d.lng == 0) || !d.lat || !d.lng) continue;
+
+			var loc = new google.maps.LatLng(d.lat, d.lng);
+			var size = 0.005;
+			var coord = [
+				{lat: loc.lat()-size, lng: loc.lng()-size},
+				{lat: loc.lat()+size, lng: loc.lng()-size},
+				{lat: loc.lat()+size, lng: loc.lng()+size},
+				{lat: loc.lat()-size, lng: loc.lng()+size}
+			];
+			bounds.extend(coord[0]);
+			bounds.extend(coord[2]);
+			
 			var rect = new google.maps.Polygon({
 				paths: coord,
 				strokeColor: '#000000',
@@ -228,14 +308,13 @@ var g_DM = (function(){
 				map: map
 			});
 			//rect.listener = rect.addListener('click', clickFn(data,i,time));
-			trafficSite[key] = rect;
+			cemsComp[key] = rect;
 			
 		}
-		
-	}
-
-	function UpdateCEMS(app, data){
-		console.log(data);
+		//console.log(bounds.getNorthEast().lat()+","+bounds.getNorthEast().lng());
+		//console.log(bounds.getSouthWest().lat()+","+bounds.getSouthWest().lng());
+		map.panToBounds(bounds);
+		map.fitBounds(bounds);
 	}
 
 	//==============init=================
