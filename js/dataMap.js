@@ -182,6 +182,9 @@ var g_DM = (function(){
 	}
 
 	function UpdatePower(data){
+		CLearDataInMap(cemsComp);
+		CLearDataInMap(trafficSite);
+		CLearDataInMap(powerStation);
 		//group by position
 		var locArr = {};
 		for(var key in data){
@@ -206,7 +209,7 @@ var g_DM = (function(){
 			var d = locArr[key];
 			//console.log(d);
 			var loc = new google.maps.LatLng(d.lat, d.lng);
-			var size = d.genNum==0?0:(3e-5*d.genSum);
+			var size = d.genNum==0?0:(5e-6*d.genSum);
 			var coord = [
 				{lat: loc.lat()-size, lng: loc.lng()-size},
 				{lat: loc.lat()+size, lng: loc.lng()-size},
@@ -255,12 +258,14 @@ var g_DM = (function(){
 			return shape;
 		}
 
+		CLearDataInMap(cemsComp);
 		CLearDataInMap(trafficSite);
+		CLearDataInMap(powerStation);
 
 		for(var key in data){
 			var d = data[key];
 			var loc = new google.maps.LatLng(d.lat, d.lng);
-			var size = d.totalAmount*1e-5;
+			var size = d.totalAmount*5e-6;
 			
 			var coord = GenShape(loc,d.dir,size);
 			
@@ -281,6 +286,8 @@ var g_DM = (function(){
 
 	function UpdateCEMS(data){
 		CLearDataInMap(cemsComp);
+		CLearDataInMap(trafficSite);
+		CLearDataInMap(powerStation);
 
 		var bounds = new google.maps.LatLngBounds();
 		
