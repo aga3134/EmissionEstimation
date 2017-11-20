@@ -18,6 +18,13 @@ var g_APP = new Vue({
       rows: [],
       length: 0,
       loading: false
+    },
+    dataMap:{
+      showEPA: true,
+      showWind: true,
+      showData: true,
+      showDetailPanel: false,
+      shapeSize: 1
     }
   },
   created: function () {
@@ -123,5 +130,10 @@ var g_APP = new Vue({
 
 
 window.addEventListener('load', function() {
-	
+	$(".top-menu").click(function(){
+    var toggleMenu = $(".toggle-menu");
+    var mode = toggleMenu.css("display");
+    if(mode == "none") toggleMenu.css("display","block");
+    else if(mode == "block") toggleMenu.css("display","none");
+  });
 });
