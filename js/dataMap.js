@@ -2,6 +2,7 @@ var g_DM = (function(){
 	var map;
 	var epaSite = [];
 	var epaArray = [];
+	var epaMarker = [];
 	var weatherStation = [];
 	var weatherArray = [];
 
@@ -24,6 +25,14 @@ var g_DM = (function(){
 			epaArray[key].setOptions({
 	    		radius: radius,
 	    		strokeOpacity: strokeOpacity
+	    	});
+		}
+		var zoom = map.getZoom();
+		var textSize = zoom>=12?((zoom-10)*8)+"px":"8px";
+		for(var key in epaMarker){
+			epaMarker[key].setOptions({
+	    		map: strokeOpacity>0?map:null,
+	    		label:{text: epaMarker[key].text, fontSize: textSize}
 	    	});
 		}
 	}
@@ -80,6 +89,7 @@ var g_DM = (function(){
 
 	function UpdateAirData(){
 		if(Object.keys(epaSite).length == 0) return;
+		CLearDataInMap(epaArray);
 
 		function AQIValueToColor(v){
 			if(v <= 50) return "#00e800";
@@ -92,6 +102,7 @@ var g_DM = (function(){
 		}
 
 		CLearDataInMap(epaArray);
+		CLearDataInMap(epaMarker);
 		var url = "data/epaData.php";
 	    url += "?date="+g_APP.dateSelect;
 	    url += "&hour="+g_APP.hourSelect;
@@ -122,12 +133,32 @@ var g_DM = (function(){
 				});
 				//circle.listener = circle.addListener('click', clickFn(data,i,time));
 				epaArray[d.siteName] = circle;
+
+				var labelText = parseInt(d.AQI).toString();
+				var marker = new google.maps.Marker({
+					position: pos,
+					label: {
+						text: labelText,
+						color: 'black',
+						fontSize: "8px"
+					},
+					map: strokeOpacity>0?map:null,
+					icon: {
+						url: "image/transparent.png",
+						size: new google.maps.Size(32, 32),
+						scaledSize: new google.maps.Size(32, 32),
+						labelOrigin: new google.maps.Point(16, 32)
+					}
+				});
+				marker.text = labelText;
+				epaMarker[d.siteName] = marker;
 			}
 	    });
 	}
 
 	function UpdateWeather(){
 		if(Object.keys(weatherStation).length == 0) return;
+		CLearDataInMap(weatherArray);
 
 		function GenArrow(loc, wDir, wSpeed, scale){
 			var arrow = [];
