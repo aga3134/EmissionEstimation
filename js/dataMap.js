@@ -9,6 +9,8 @@ var g_DM = (function(){
 	var powerStation = [];
 	var trafficSite = [];
 	var cemsComp = [];
+
+	var infoWindow = new google.maps.InfoWindow();
 	
 	function GetEPARadius(){
 		if(!map) return 2000;
@@ -28,7 +30,7 @@ var g_DM = (function(){
 	    	});
 		}
 		var zoom = map.getZoom();
-		var textSize = zoom>=12?((zoom-10)*8)+"px":"8px";
+		var textSize = zoom>=11?((zoom-9)*8)+"px":"8px";
 		for(var key in epaMarker){
 			epaMarker[key].setOptions({
 	    		map: strokeOpacity>0?map:null,
@@ -91,6 +93,27 @@ var g_DM = (function(){
 		if(Object.keys(epaSite).length == 0) return;
 		CLearDataInMap(epaArray);
 
+		function clickFn(d){ 
+			return function() {
+				var str = "<p>測站: "+d.data.siteName+"<br>";
+				//str += "時間: "+d.data.time+"<br>";
+				str += "AQI: "+d.data.AQI+"<br>";
+				str += "PM2.5: "+d.data.PM25+" (μg/m3)<br>";
+				str += "PM10: "+d.data.PM10+" (μg/m3)<br>";
+				str += "SO2: "+d.data.SO2+" (ppb)<br>";
+				str += "NO: "+d.data.NO+" (ppb)<br>";
+				str += "NO2: "+d.data.NO2+" (ppb)<br>";
+				str += "NOx: "+d.data.NOx+" (ppb)<br>";
+				str += "O3: "+d.data.O3+" (ppb)<br>";
+				str += "CO: "+d.data.CO+" (ppm)</p>";
+				infoWindow.setOptions({content: str, position: d.pos});
+				infoWindow.open(map);
+			};
+		}
+		if(infoWindow.getMap()){
+			infoWindow.setOptions({map: null});
+		}
+
 		function AQIValueToColor(v){
 			if(v <= 50) return "#00e800";
 			else if(v <= 100) return "#ffff00";
@@ -114,6 +137,7 @@ var g_DM = (function(){
 			var radius = GetEPARadius();
 			var strokeOpacity = radius>=5000?0:0.5;
 			var epaData = JSON.parse(data);
+			var showMap = g_APP.dataMap.showEPA?map:null;
 			for(var i=0;i<epaData.length;i++){
 				var d = epaData[i];
 				var site = epaSite[d.siteName];
@@ -129,9 +153,9 @@ var g_DM = (function(){
 					fillColor: AQIValueToColor(d.AQI),
 					fillOpacity: 0.5,
 					zIndex: 2,
-					map: map
+					map: showMap
 				});
-				//circle.listener = circle.addListener('click', clickFn(data,i,time));
+				circle.listener = circle.addListener('click', clickFn({data:d, pos:pos}));
 				epaArray[d.siteName] = circle;
 
 				var labelText = parseInt(d.AQI).toString();
@@ -142,15 +166,16 @@ var g_DM = (function(){
 						color: 'black',
 						fontSize: "8px"
 					},
-					map: strokeOpacity>0?map:null,
+					map: strokeOpacity>0?showMap:null,
 					icon: {
 						url: "image/transparent.png",
-						size: new google.maps.Size(32, 32),
-						scaledSize: new google.maps.Size(32, 32),
-						labelOrigin: new google.maps.Point(16, 32)
+						size: new google.maps.Size(8, 8),
+						scaledSize: new google.maps.Size(8, 8),
+						labelOrigin: new google.maps.Point(4, 8)
 					}
 				});
 				marker.text = labelText;
+				marker.listener = marker.addListener('click', clickFn({data:d, pos:pos}));
 				epaMarker[d.siteName] = marker;
 			}
 	    });
@@ -192,6 +217,7 @@ var g_DM = (function(){
 			//1 m/s風速每10分鐘可將空汙吹動0.0054度 => 箭頭長度約為此風速下30分鐘空汙移動距離
 			var arrowScale = 0.0162;
 			var weatherData = JSON.parse(data);
+			var showMap = g_APP.dataMap.showWind?map:null;
 			for(var i=0;i<weatherData.length;i++){
 				var d = weatherData[i];
 				var station = weatherStation[d.stationID];
@@ -204,7 +230,7 @@ var g_DM = (function(){
 					geodesic: true,
 					strokeColor: '#0000FF',
 					strokeWeight: 1,
-					map: map,
+					map: showMap,
 					zIndex: 3
 				});
 				weatherArray[d.stationID] = arrow;
@@ -213,6 +239,19 @@ var g_DM = (function(){
 	}
 
 	function UpdatePower(data){
+		function clickFn(d){ 
+			return function() {
+				var name = d.data.data[0].name.split("#")[0];
+				var str = "<p>"+name+"發電廠<br>";
+				str += "總發電量: "+parseInt(d.data.genSum)+" MW<br>";
+				infoWindow.setOptions({content: str, position: d.pos});
+				infoWindow.open(map);
+			};
+		}
+		if(infoWindow.getMap()){
+			infoWindow.setOptions({map: null});
+		}
+
 		CLearDataInMap(cemsComp);
 		CLearDataInMap(trafficSite);
 		CLearDataInMap(powerStation);
@@ -256,7 +295,7 @@ var g_DM = (function(){
 				zIndex: 2,
 				map: map
 			});
-			//rect.listener = rect.addListener('click', clickFn(data,i,time));
+			rect.listener = rect.addListener('click', clickFn({data:d,pos:loc}));
 			powerStation[key] = rect;
 		}
 	}
@@ -293,6 +332,18 @@ var g_DM = (function(){
 		CLearDataInMap(trafficSite);
 		CLearDataInMap(powerStation);
 
+		function clickFn(d){ 
+			return function() {
+				var str = "<p>"+d.data.type+"<br>";
+				str += "車流總數: "+d.data.totalAmount+" 輛<br>";
+				infoWindow.setOptions({content: str, position: d.pos});
+				infoWindow.open(map);
+			};
+		}
+		if(infoWindow.getMap()){
+			infoWindow.setOptions({map: null});
+		}
+
 		for(var key in data){
 			var d = data[key];
 			var loc = new google.maps.LatLng(d.lat, d.lng);
@@ -308,7 +359,7 @@ var g_DM = (function(){
 				zIndex: 2,
 				map: map
 			});
-			//shape.listener = shape.addListener('click', clickFn(data,i,time));
+			shape.listener = shape.addListener('click', clickFn({data:d,pos:loc}));
 			trafficSite[key] = shape;
 			
 		}
@@ -319,6 +370,17 @@ var g_DM = (function(){
 		CLearDataInMap(cemsComp);
 		CLearDataInMap(trafficSite);
 		CLearDataInMap(powerStation);
+
+		function clickFn(d){ 
+			return function() {
+				var str = "<p>"+d.data.name+"<br>";
+				infoWindow.setOptions({content: str, position: d.pos});
+				infoWindow.open(map);
+			};
+		}
+		if(infoWindow.getMap()){
+			infoWindow.setOptions({map: null});
+		}
 
 		var bounds = new google.maps.LatLngBounds();
 		
@@ -345,7 +407,7 @@ var g_DM = (function(){
 				zIndex: 2,
 				map: map
 			});
-			//rect.listener = rect.addListener('click', clickFn(data,i,time));
+			rect.listener = rect.addListener('click', clickFn({data:d,pos:loc}));
 			cemsComp[key] = rect;
 			
 		}

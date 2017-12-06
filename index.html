@@ -30,6 +30,16 @@
 			
 			<div class="map-container">
 				<div id="dataMap"></div>
+				<div>
+					<img class="map-option" src="image/option.png" v-on:click="OpenMapOption">
+					<div class="option-panel" v-if="dataMap.showOption">
+						<div class="center-panel">
+							<div>空氣指標 <input type="checkbox" v-model="dataMap.showEPA" v-on:change="UpdateMap"></div>
+							<div>風向 <input type="checkbox" v-model="dataMap.showWind" v-on:change="UpdateMap"></div>
+						</div>
+						<div class="close-bt" v-on:click="CloseMapOption">X</div>
+					</div>
+				</div>
 			</div><!-- white space will make 50% width exceed a single row
 		 --><div id="dataTable">
 		 		<div class="h-scroll">

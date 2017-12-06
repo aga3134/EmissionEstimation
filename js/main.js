@@ -24,7 +24,8 @@ var g_APP = new Vue({
       showWind: true,
       showData: true,
       showDetailPanel: false,
-      shapeSize: 1
+      shapeSize: 1,
+      showOption: false
     }
   },
   created: function () {
@@ -124,6 +125,12 @@ var g_APP = new Vue({
     UpdateMap: function(){
       g_DM.UpdateAirData(this);
       g_DM.UpdateWeather(this);
+    },
+    OpenMapOption: function(){
+      this.dataMap.showOption = true;
+    },
+    CloseMapOption: function(){
+      this.dataMap.showOption = false;
     }
   }
 });
