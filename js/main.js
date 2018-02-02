@@ -49,6 +49,7 @@ var g_APP = new Vue({
       var UpdateOP = function(op){
         if(op.length > 0) this.dataTable.opSelect = op[0].value;
         else this.dataTable.opSelect = "";
+        this.dataTable.filterWord = "";
         this.dataTable.opList = op;
         this.UpdateTable();
         this.UpdateMap();
