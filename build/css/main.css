@@ -205,6 +205,8 @@ html, body {
     margin: 0px; }
   #dataTable .long {
     min-width: 300px; }
+  #dataTable input {
+    padding: 5px; }
   #dataTable table {
     margin: 10px 0px;
     border-collapse: collapse;

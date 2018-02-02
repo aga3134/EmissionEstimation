@@ -50,8 +50,9 @@
 								{{option.name}}
 							</option>
 			 			</select>
+			 			篩選: <input type="text" v-model="dataTable.filterWord" v-on:change="UpdateFilterRows">
 		 			</div>
-		 			<div class="info">資料筆數: {{dataTable.length}}</div>
+		 			<div class="info">資料筆數: {{dataTable.length}}，篩選筆數: {{dataTable.filterRows.length}}</div>
 			 		<table>
 			 			<thead>
 				 			<tr>
@@ -60,7 +61,7 @@
 				 			</tr>
 			 			</thead>
 			 			<tbody>
-				 			<tr v-for="row in dataTable.rows">
+				 			<tr v-for="row in dataTable.filterRows">
 				 				<td v-for="key in dataTable.keys">{{row[key.value]}}</td>
 				 			</tr>
 			 			</tbody>

@@ -79,6 +79,7 @@ var g_DT = function(){
       }
     }
 
+    //發電單位是功率MV，對時間應該取平均而不是加總。這邊用加總是方便之後計算平均值
     for(var i=0;i<data.length;i++){
       var d = data[i];
       var station = mapData[d.stationID];
@@ -158,7 +159,7 @@ var g_DT = function(){
     url += "?date="+g_APP.dateSelect;
     url += "&hour="+g_APP.hourSelect;
     url += "&type="+g_APP.dataTable.opSelect;
-    console.log(url);
+    //console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
@@ -193,6 +194,7 @@ var g_DT = function(){
       g_APP.dataTable.keys = keyArr;
       g_APP.dataTable.rows = rowArr;
       g_APP.dataTable.loading = false;
+      g_APP.UpdateFilterRows();
     });
   };
 
@@ -202,7 +204,7 @@ var g_DT = function(){
     url += "?date="+g_APP.dateSelect;
     url += "&hour="+g_APP.hourSelect;
     url += "&type="+g_APP.dataTable.opSelect;
-    console.log(url);
+    //console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
@@ -237,6 +239,7 @@ var g_DT = function(){
       g_APP.dataTable.keys = keyArr;
       g_APP.dataTable.rows = rowArr;
       g_APP.dataTable.loading = false;
+      g_APP.UpdateFilterRows();
     });
   };
 
@@ -246,7 +249,7 @@ var g_DT = function(){
     url += "?date="+g_APP.dateSelect;
     url += "&hour="+g_APP.hourSelect;
     url += "&city="+g_APP.dataTable.opSelect;
-    console.log(url);
+    //console.log(url);
     $.get(url, function(data){
       //console.log(data);
       if(!data){
@@ -284,6 +287,7 @@ var g_DT = function(){
       g_APP.dataTable.keys = keyArr;
       g_APP.dataTable.rows = rowArr;
       g_APP.dataTable.loading = false;
+      g_APP.UpdateFilterRows();
     });
   };
 

@@ -246,6 +246,8 @@ var g_DM = (function(){
 				str += "總發電量: "+parseInt(d.data.genSum)+" MW<br>";
 				infoWindow.setOptions({content: str, position: d.pos});
 				infoWindow.open(map);
+				g_APP.dataTable.filterWord = name;
+				g_APP.UpdateFilterRows();
 			};
 		}
 		if(infoWindow.getMap()){
@@ -262,14 +264,24 @@ var g_DM = (function(){
 			var key = d.lat+","+d.lng;
 			if(locArr[key]){
 				locArr[key].data.push(d);
-				locArr[key].genSum += d.genSum;
-				locArr[key].genNum += d.genNum;
+				//console.log(d);
+				//這邊genSum/genNum是各機組的平均發電功率，將平均功率加總可得所有機組發電總功率
+				if(d.genNum > 0){
+					locArr[key].genSum += d.genSum/d.genNum;
+					locArr[key].genNum += 1;
+				}
 			}
 			else{
 				locArr[key] = {};
 				locArr[key].data = [d];
-				locArr[key].genSum = d.genSum;
-				locArr[key].genNum = d.genNum;
+				if(d.genNum > 0){
+					locArr[key].genSum = d.genSum/d.genNum;
+					locArr[key].genNum = 1;
+				}
+				else{
+					locArr[key].genSum = 0;
+					locArr[key].genNum = 0;
+				}
 				locArr[key].lat = d.lat;
 				locArr[key].lng = d.lng;
 			}
@@ -277,9 +289,8 @@ var g_DM = (function(){
 		//draw in map
 		for(key in locArr){
 			var d = locArr[key];
-			//console.log(d);
 			var loc = new google.maps.LatLng(d.lat, d.lng);
-			var size = d.genNum==0?0:(5e-6*d.genSum);
+			var size = d.genNum==0?0:(2e-5*d.genSum);
 			var coord = [
 				{lat: loc.lat()-size, lng: loc.lng()-size},
 				{lat: loc.lat()+size, lng: loc.lng()-size},
@@ -338,6 +349,8 @@ var g_DM = (function(){
 				str += "車流總數: "+d.data.totalAmount+" 輛<br>";
 				infoWindow.setOptions({content: str, position: d.pos});
 				infoWindow.open(map);
+				g_APP.dataTable.filterWord = d.data.interchange;
+				g_APP.UpdateFilterRows();
 			};
 		}
 		if(infoWindow.getMap()){
@@ -376,6 +389,8 @@ var g_DM = (function(){
 				var str = "<p>"+d.data.name+"<br>";
 				infoWindow.setOptions({content: str, position: d.pos});
 				infoWindow.open(map);
+				g_APP.dataTable.filterWord = d.data.name;
+				g_APP.UpdateFilterRows();
 			};
 		}
 		if(infoWindow.getMap()){

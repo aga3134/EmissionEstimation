@@ -16,6 +16,8 @@ var g_APP = new Vue({
       opList: [],
       keys: [],
       rows: [],
+      filterWord:"",
+      filterRows:[],
       length: 0,
       loading: false
     },
@@ -41,7 +43,7 @@ var g_APP = new Vue({
   },
   methods: {
   	ChangeSource: function(){
-  		console.log("change source: "+this.sourceSelect);
+  		//console.log("change source: "+this.sourceSelect);
       var op = [];
       
       var UpdateOP = function(op){
@@ -95,17 +97,17 @@ var g_APP = new Vue({
       
   	},
   	ChangeDate: function(){
-  		console.log("change date: "+this.dateSelect);
+  		//console.log("change date: "+this.dateSelect);
       this.UpdateTable();
       this.UpdateMap();
   	},
   	ChangeHour: function(){
-  		console.log("change hour: "+this.hourSelect);
+  		//console.log("change hour: "+this.hourSelect);
       this.UpdateTable();
       this.UpdateMap();
   	},
     ChangeDataOption: function(){
-      console.log("change data option"+this.dataTable.opSelect);
+      //console.log("change data option"+this.dataTable.opSelect);
       this.UpdateTable();
       this.UpdateMap();
     },
@@ -125,6 +127,23 @@ var g_APP = new Vue({
     UpdateMap: function(){
       g_DM.UpdateAirData(this);
       g_DM.UpdateWeather(this);
+    },
+    UpdateFilterRows: function(){
+      this.dataTable.filterRows = [];
+      if(this.dataTable.filterWord == ""){
+        for(var i=0;i<this.dataTable.rows.length;i++){
+          this.dataTable.filterRows.push(this.dataTable.rows[i]);
+        }
+      }
+      else{
+        for(var i=0;i<this.dataTable.rows.length;i++){
+          for(key in this.dataTable.rows[i]){
+            if(this.dataTable.rows[i][key].indexOf(this.dataTable.filterWord) != -1){
+              this.dataTable.filterRows.push(this.dataTable.rows[i]);
+            }
+          }
+        }
+      }
     },
     OpenMapOption: function(){
       this.dataMap.showOption = true;
