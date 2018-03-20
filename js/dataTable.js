@@ -291,6 +291,67 @@ var g_DT = function(){
     });
   };
 
+  var LoadCEMSEmission = function(){
+    g_APP.dataTable.loading = true;
+    var url = "data/cemsEmission.php";
+    url += "?date="+g_APP.dateSelect;
+    url += "&hour="+g_APP.hourSelect;
+    url += "&city="+g_APP.dataTable.opSelect;
+    //console.log(url);
+    $.get(url, function(data){
+      //console.log(data);
+      if(!data){
+        g_APP.dataTable.keys = [];
+        g_APP.dataTable.rows = [];
+        g_APP.dataTable.loading = false;
+        mapData = [];
+        return;
+      }
+      var json = JSON.parse(data);
+      GenMapCEMSData(json);
+      g_APP.dataTable.length = json.length;
+      var keyArr = [{name:"公司",value:"compName"},
+        {name:"裝置編號",value:"p_no"},
+        {name:"SOx",value:"EMI_SOx"},
+        {name:"NOx",value:"EMI_NOx"},
+        {name:"CO",value:"EMI_CO"},
+        {name:"VOC",value:"EMI_CH4"},
+        {name:"時間",value:"dateTime"}];
+      var rowArr = [];
+      var comps = cemsComp[g_APP.dataTable.opSelect];
+      for(var i=0;i<json.length;i++){
+        var d = json[i];
+        var site = comps[d.c_no];
+        if(!site) continue;
+        var record = {};
+        record["compName"] = site.name;
+        record["p_no"] = d.p_no;
+        record["EMI_SOx"] = d.EMI_SOx;
+        if(record["EMI_SOx"]){
+          record["EMI_SOx"] += " (公噸/小時)";
+        }
+        record["EMI_NOx"] = d.EMI_NOx;
+        if(record["EMI_NOx"]){
+          record["EMI_NOx"] += " (公噸/小時)";
+        }
+        record["EMI_CO"] = d.EMI_CO;
+        if(record["EMI_CO"]){
+          record["EMI_CO"] += " (公噸/小時)";
+        }
+        record["EMI_CH4"] = d.EMI_CH4;
+        if(record["EMI_CH4"]){
+          record["EMI_CH4"] += " (公噸/小時)";
+        }
+        record["dateTime"] = g_Util.DateToString(new Date(d.dateTime),"HH:mm");
+        rowArr.push(record);
+      }
+      g_APP.dataTable.keys = keyArr;
+      g_APP.dataTable.rows = rowArr;
+      g_APP.dataTable.loading = false;
+      g_APP.UpdateFilterRows();
+    });
+  };
+
   //==============init=================
   
 
@@ -298,6 +359,7 @@ var g_DT = function(){
     InitSites: InitSites,
     LoadPowerGen: LoadPowerGen,
     LoadTraffic: LoadTraffic,
-    LoadCEMS: LoadCEMS
+    LoadCEMS: LoadCEMS,
+    LoadCEMSEmission: LoadCEMSEmission
   };
 }();

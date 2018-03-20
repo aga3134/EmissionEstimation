@@ -9,11 +9,10 @@
 	<body>
 		<div id="app">
 			<div class="topbar">
-				<div class="title">空汙排放推估</div>
+				<div class="title"><a href="/">空汙排放推估</a></div>
 				<div class="top-nav">
 					<ul>
-						<li>資料來源</li>
-						<li>關於本站</li>
+						<li><a href="/about.html">關於本站</a></li>
 					</ul>
 				</div>
 				<div class="top-menu">
@@ -23,8 +22,7 @@
 			<div class="bar-padding"></div>
 			<div class="toggle-menu">
 				<ul>
-					<li>資料來源</li>
-					<li>關於本站</li>
+					<li><a href="/about.html">關於本站</a></li>
 				</ul>
 			</div>
 			
@@ -51,6 +49,13 @@
 							</option>
 			 			</select>
 			 			篩選: <input type="text" v-model="dataTable.filterWord" v-on:change="UpdateFilterRows">
+		 			</div>
+		 			<div class="radio-container" v-show="sourceSelect=='cems'">
+		 				資料類型:
+		 				<input type="radio" value="activity" v-model="dataTable.type"
+		 					v-on:change="UpdateTable">活動強度
+						<input type="radio" value="emission" v-model="dataTable.type"
+							v-on:change="UpdateTable">排放推估
 		 			</div>
 		 			<div class="info">資料筆數: {{dataTable.length}}，篩選筆數: {{dataTable.filterRows.length}}</div>
 			 		<table>

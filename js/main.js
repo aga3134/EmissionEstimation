@@ -19,7 +19,8 @@ var g_APP = new Vue({
       filterWord:"",
       filterRows:[],
       length: 0,
-      loading: false
+      loading: false,
+      type:"activity"
     },
     dataMap:{
       showEPA: true,
@@ -121,7 +122,10 @@ var g_APP = new Vue({
           g_DT.LoadTraffic(this);
           break;
         case "cems":
-          g_DT.LoadCEMS(this);
+          switch(this.dataTable.type){
+            case "activity": g_DT.LoadCEMS(this); break;
+            case "emission": g_DT.LoadCEMSEmission(this); break;
+          }
           break;
       }
     },
@@ -139,6 +143,7 @@ var g_APP = new Vue({
       else{
         for(var i=0;i<this.dataTable.rows.length;i++){
           for(key in this.dataTable.rows[i]){
+            if(!this.dataTable.rows[i][key]) continue;
             if(this.dataTable.rows[i][key].indexOf(this.dataTable.filterWord) != -1){
               this.dataTable.filterRows.push(this.dataTable.rows[i]);
             }

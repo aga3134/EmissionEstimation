@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Emission Estimation</title>
+	    <meta charset="utf-8">
+	    <link rel="stylesheet" type="text/css" href="build/css/main.css?v=1.0.0">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div>
+			<div class="topbar">
+				<div class="title"><a href="/">空汙排放推估</a></div>
+				<div class="top-nav">
+					<ul>
+						<li><a href="/about.html">關於本站</a></li>
+					</ul>
+				</div>
+				<div class="top-menu">
+					<img src="image/menu-button.svg">
+				</div>
+			</div>
+			<div class="bar-padding"></div>
+			<div class="toggle-menu">
+				<ul>
+					<li><a href="/about.html">關於本站</a></li>
+				</ul>
+			</div>
+
+			<div class="about">
+				<h1>關於本站</h1>
+				本站提供空氣汙染來源Open Data之整合查詢，包含火力發電量、國道交通流量、固定汙染源連續監測系統(CEMS)數值與排放量推估。
+				網站由中興大學環境工程系<a href="http://www.ev.nchu.edu.tw/wb_professor02.asp?c=1&u=13" target="_blank">莊秉潔教授</a>團隊、<a href="https://www.nchc.org.tw/tw/" target="_blank">國家高速網路與計算中心</a>、<a href="https://agawork.tw" target="_blank">Agawork</a>協力建置維護。
+
+				<h2>開放源始碼</h2>
+				<ul>
+					<li><a href="https://github.com/aga3134/DataCollection" target="_blank">資料收集原始碼</a></li>
+					<li><a href="https://github.com/aga3134/EmissionEstimation" target="_blank">網站原始碼</a></li>
+				</ul>
+				
+				<h2>資料來源</h2>
+				<h3>環保署空品資料</h3>
+				<ul>
+					<li><a href="https://data.gov.tw/dataset/6075" target="_blank">空氣品質監測站基本資料</a></li>
+					<li><a href="https://data.gov.tw/dataset/40448" target="_blank">環保署空品資料</a></li>
+				</ul>
+				<h3>台電發電資料</h3>
+				<ul>
+					<li><a href="http://stpc00601.taipower.com.tw/loadGraph/loadGraph/genshx.html" target="_blank">機組發電量</a></li>
+				</ul>
+				<h3>氣象資料</h3>
+				<ul>
+					<li><a href="http://opendata.cwb.gov.tw/datalist" target="_blank">自動氣象站-氣象觀測資料</a></li>
+				</ul>
+				<h3>交通資料</h3>
+				<ul>
+					<li><a href="https://data.gov.tw/dataset/21165" target="_blank">國道計費門架座標及里程牌價表</a></li>
+					<li><a href="http://tisvcloud.freeway.gov.tw/history/TDCS/M03A/" target="_blank">交通資料庫TDCS M03A</a></li>
+				</ul>
+				<h3>固定污染源連續監測資料</h3>
+				<ul>
+					<li><a href="https://data.gov.tw/dataset/31970" target="_blank">固定污染源CEMS監測數據紀錄值資料集(1小時紀錄值)</a></li>
+					<li><a href="https://github.com/ks-opendata-community/chimney/tree/gh-pages/data" target="_blank">CEMS工廠、項目資料</a></li>
+				</ul>
+				<h3>排放推估公式</h3>
+				<ul>
+					<li>排放量公式(ton/hr)=排放濃度(ppm)*污染物分子量*273/22.4/(273+排放溫度(C))/(10^3)*排放流率(Nm3/hr)/(10^3)/(10^3)</li>
+				</ul>
+
+				<h2>資料串接</h2>
+				<ul>
+					<li><a href="https://docs.google.com/presentation/d/1gsjUXDqPU5be0SyDpadR0A6gJKPqZEG7ZQ_BkFPzNVk/edit?usp=sharing" target="_blank">空汙排放推估網站API介紹</a></li>
+				</ul>
+
+				<h2>相關專案</h2>
+				<ul>
+					<li><a href="http://pm25.colife.org.tw/index.aspx" target="_blank">細懸浮微粒(PM2.5)污染來源分析系統</a></li>
+					<li><a href="https://purbao.lass-net.org/" target="_blank">紫豹在哪裡</a></li>
+				</ul>
+			</div>
+			<div class="bar-padding"></div>
+
+			<div class="control-bar center">
+				<a class="link" href="/">回首頁</a>
+			</div>
+			
+		</div>
+		
+		<script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+		<script src="js/about.js?v=1.0.0"></script>
+	</body>
+</html>

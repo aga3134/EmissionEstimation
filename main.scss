@@ -7,7 +7,7 @@ $pc-media: 800px;
 }
 //===================General======================
 html, body { 
-  height: 100%; margin: 0; padding: 0; 
+  height: 100%; margin: 0; padding: 0;
 }
 
 * {
@@ -64,6 +64,12 @@ html, body {
 	}
 }
 
+.radio-container{
+	padding: 5px 0px;
+	margin-bottom: 10px;
+	border-bottom: 2px solid #7D9C8D;
+}
+
 //================topbar=======================
 .topbar{
 	position: fixed;
@@ -74,10 +80,18 @@ html, body {
 	padding: 10px;
 	background-color: #EAE1FF;
 	border-bottom: 1px solid rgb(150,150,150);
+	a{
+		text-decoration: none;
+		color: inherit;
+	}
 	.title{
 		font-size: 1.5em;
 		margin: 0px 20px;
 		font-weight: bold;
+		color: rgb(50,50,50);
+		&:hover{
+			color: rgb(100,100,100);
+		}
 	}
 	.top-nav{
 		display: none;
@@ -133,6 +147,11 @@ html, body {
 	left: 0px;
 	background-color: #EFEFFF;
 	z-index: 2;
+	border-bottom: 1px solid #969696;
+	a{
+		text-decoration: none;
+		color: inherit;
+	}
 	ul{
 		border-top: 1px solid rgb(170,170,170);
 		list-style-type: none;
@@ -326,5 +345,34 @@ html, body {
 	}
 	select{
 		padding: 5px;
+	}
+	.link{
+		text-decoration: none;
+		color: rgb(50,50,150);
+		font-size: 1.2em;
+		&:hover{
+			color: rgb(50,150,50);
+		}
+	}
+}
+
+//=================about======================
+.about{
+	width: 800px;
+	max-width: 100%;
+	margin: auto;
+	padding: 20px;
+	line-height: 1.5em;
+	color: rgb(50,50,50);
+	h3{
+		color: rgb(50,50,100);
+		text-indent: 1em;
+	}
+	a{
+		text-decoration: none;
+		color: rgb(50,50,150);
+		&:hover{
+			color: rgb(50,150,50);
+		}
 	}
 }
