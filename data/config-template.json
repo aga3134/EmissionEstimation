@@ -4,5 +4,11 @@
 		"dbName": "YourDBName",
     	"username": "YourUserName",
     	"password": "YourPassword"
+	},
+	"forecastAuth": {
+		"host": "YourDatabaseHost",
+		"dbName": "YourDBName",
+    	"username": "YourUserName",
+    	"password": "www1@YourPassword"
 	}
 }
