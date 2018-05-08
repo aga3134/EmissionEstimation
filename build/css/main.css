@@ -296,3 +296,21 @@ html, body {
     color: #323296; }
     .about a:hover {
       color: #329632; }
+
+.forecast .category {
+  padding: 20px;
+  margin: auto;
+  text-align: center;
+  font-size: 1.5em; }
+
+.forecast .forecast-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px 10px; }
+  .forecast .forecast-container .forecast-title {
+    text-align: center;
+    font-size: 1.25em; }
+  .forecast .forecast-container .forecast-image {
+    width: 300px;
+    max-width: 100%;
+    margin: auto; }

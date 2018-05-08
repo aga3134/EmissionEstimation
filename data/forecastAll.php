@@ -15,13 +15,13 @@ $reqOffset = $_GET["offset"];
 
 switch ($reqOffset) {
     case 1:
-        $sql = "SELECT d,station_id,obs,PMfstrS,PMfStrL,PMfstrA,oversea FROM report_f1_2017";
+        $sql = "SELECT d,station_id,obs,PMfstrS,PMfstrL,PMfstrA,oversea FROM report_f1_2017";
         break;
     case 2:
-        $sql = "SELECT d,station_id,obs,PMfstrS,PMfStrL,PMfstrA,oversea FROM report_f2_2017";
+        $sql = "SELECT d,station_id,obs,PMfstrS,PMfstrL,PMfstrA,oversea FROM report_f2_2017";
         break;
     case 3:
-        $sql = "SELECT d,station_id,obs,PMfstrS,PMfStrL,PMfstrA,oversea FROM report_f3_2017";
+        $sql = "SELECT d,station_id,obs,PMfstrS,PMfstrL,PMfstrA,oversea FROM report_f3_2017";
         break;
     default:
     	$conn->close();
