@@ -34,15 +34,15 @@
 			<div class="forecast-container slide-3col">
 				<div>
 					<div class="forecast-title">預報第一天</div>
-					<img class="forecast-image" src="/image/loading.gif">
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc[0]">
 				</div>
 				<div>
 					<div class="forecast-title">預報第二天</div>
-					<img class="forecast-image" src="/image/loading.gif">
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc[1]">
 				</div>
 				<div>
 					<div class="forecast-title">預報第三天</div>
-					<img class="forecast-image" src="/image/loading.gif">
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc[2]">
 				</div>
 			</div>
 		 	<div class="bar-padding"></div>
@@ -63,7 +63,7 @@
 	    
 	    <!--<script src="https://unpkg.com/vue"></script>-->
 	    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-
+	    <script src="js/moment.min.js"></script>
 	    <script src="js/util.js?v=1.0.0"></script>
 	    <script src="js/forecast.js?v=1.0.0"></script>
 	</body>
