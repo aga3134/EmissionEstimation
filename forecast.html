@@ -17,6 +17,7 @@
 				<div class="top-nav">
 					<ul>
 						<li><a href="about.html">關於本站</a></li>
+						<li><a href="forecast.html">預報實驗</a></li>
 					</ul>
 				</div>
 				<div class="top-menu">
@@ -27,6 +28,7 @@
 			<div class="toggle-menu">
 				<ul>
 					<li><a href="about.html">關於本站</a></li>
+					<li><a href="forecast.html">預報實驗</a></li>
 				</ul>
 			</div>
 			
@@ -53,7 +55,7 @@
 						{{source.name}}
 					</option>
 				</select>
-				日期: <input type="date" min="2017-12-01" max="2017-12-29" v-model="dateSelect" v-on:change="ChangeDate">
+				日期: <input type="date" min="2017-12-01" max="2017-12-29" v-model="dateSelect" v-on:input="ChangeDate">
 				
 			</div>
 		</div>

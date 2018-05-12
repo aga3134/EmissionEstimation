@@ -86,8 +86,8 @@
 						{{source.name}}
 					</option>
 				</select>
-				日期: <input type="date" v-model="dateSelect" v-on:change="ChangeDate">
-				小時: <input type="number" v-model="hourSelect" v-on:change="ChangeHour" min="0" max="23" step="1">
+				日期: <input type="date" v-model="dateSelect" v-on:input="ChangeDate">
+				小時: <input type="number" v-model="hourSelect" v-on:input="ChangeHour" min="0" max="23" step="1">
 			</div>
 		</div>
 		
