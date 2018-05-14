@@ -7,24 +7,20 @@ var g_Forecast = new Vue({
   		{name: "GTx", value: "forecast"},
   		{name: "GTx+AI", value: "corrected"},
   	],
-    sourceName: "",
-    sourceValue: "",
-    sourceIndex: 2,
     dateSelect: "2017-12-01",
-    imageSrc:["","",""],
+    imageSrc:{
+      "observe":["","",""],
+      "forecast":["","",""],
+      "corrected":["","",""]
+    },
   },
   created: function () {
-  	this.ChangeSource();
+  	this.UpdateImage();
   },
   methods: {
   	ChangeDate: function(){
   		this.UpdateImage();
   	},
-    ChangeSource: function(){
-      this.sourceName = this.sourceList[this.sourceIndex].name;
-      this.sourceValue = this.sourceList[this.sourceIndex].value;
-      this.UpdateImage();
-    },
     NextDate: function(){
       var day = moment(this.dateSelect, "YYYY-MM-DD");
       day.add(1, 'days');
@@ -36,15 +32,18 @@ var g_Forecast = new Vue({
       this.dateSelect = day.format("YYYY-MM-DD");
     },
     UpdateImage: function(){
-      var p = "gen/image/"+this.sourceValue+"/"
-      for(var i=0;i<this.imageSrc.length;i++){
-        var targetDay = moment(this.dateSelect, "YYYY-MM-DD");
-        targetDay.add(i, 'days');
-        var f = this.sourceValue+"_F"+(i+1)+"_";
-        f += targetDay.format("YYYY-MM-DD")+".jpg";
-        this.imageSrc[i] = p+f;
-        //$("#F"+(i+1)).attr("src",p+f);
+      for(var s in this.imageSrc){
+        var p = "gen/image/"+s+"/";
+        for(var i=0;i<this.imageSrc[s].length;i++){
+          var targetDay = moment(this.dateSelect, "YYYY-MM-DD");
+          targetDay.add(i, 'days');
+          var f = s+"_F"+(i+1)+"_";
+          f += targetDay.format("YYYY-MM-DD")+".jpg";
+          this.imageSrc[s][i] = p+f;
+          //$("#F"+(i+1)).attr("src",p+f);
+        }
       }
+      
       //console.log(this.imageSrc);
       //不加的話image換圖會delay
       this.$forceUpdate();

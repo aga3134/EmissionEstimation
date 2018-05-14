@@ -32,29 +32,58 @@
 				</ul>
 			</div>
 			
-			<div class="category">{{sourceName}} - {{dateSelect}} 三日預報</div>
+			<div class="category">GTx - {{dateSelect}} 三日預報</div>
 			<div class="forecast-container slide-3col">
 				<div>
 					<div class="forecast-title">預報第一天</div>
-					<img class="forecast-image" id="F1" v-bind:src="imageSrc[0]">
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc['forecast'][0]">
 				</div>
 				<div>
 					<div class="forecast-title">預報第二天</div>
-					<img class="forecast-image" id="F2" v-bind:src="imageSrc[1]">
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc['forecast'][1]">
 				</div>
 				<div>
 					<div class="forecast-title">預報第三天</div>
-					<img class="forecast-image" id="F3" v-bind:src="imageSrc[2]">
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc['forecast'][2]">
+				</div>
+			</div>
+			<hr>
+
+			<div class="category">GTx + AI - {{dateSelect}} 三日預報</div>
+			<div class="forecast-container slide-3col">
+				<div>
+					<div class="forecast-title">預報第一天</div>
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc['corrected'][0]">
+				</div>
+				<div>
+					<div class="forecast-title">預報第二天</div>
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc['corrected'][1]">
+				</div>
+				<div>
+					<div class="forecast-title">預報第三天</div>
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc['corrected'][2]">
+				</div>
+			</div>
+			<hr>
+
+			<div class="category">觀測結果 - {{dateSelect}} 三日觀測</div>
+			<div class="forecast-container slide-3col">
+				<div>
+					<div class="forecast-title">觀測第一天</div>
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc['observe'][0]">
+				</div>
+				<div>
+					<div class="forecast-title">觀測第二天</div>
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc['observe'][1]">
+				</div>
+				<div>
+					<div class="forecast-title">觀測第三天</div>
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc['observe'][2]">
 				</div>
 			</div>
 		 	<div class="bar-padding"></div>
 
 			<div class="control-bar center">
-				資料選擇: <select id="sourceSelect" v-model="sourceIndex" v-on:change="ChangeSource">
-					<option v-for="(source,index) in sourceList" v-bind:value="index">
-						{{source.name}}
-					</option>
-				</select>
 				日期: <input type="date" min="2017-12-01" max="2017-12-29" v-model="dateSelect" v-on:input="ChangeDate">
 				
 			</div>
@@ -67,6 +96,6 @@
 	    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	    <script src="js/moment.min.js"></script>
 	    <script src="js/util.js?v=1.0.0"></script>
-	    <script src="js/forecast.js?v=1.0.0"></script>
+	    <script src="js/forecast.js?v=1.0.1"></script>
 	</body>
 </html>
