@@ -36,7 +36,7 @@ var g_Forecast = new Vue({
       this.dateSelect = day.format("YYYY-MM-DD");
     },
     UpdateImage: function(){
-      var p = "/gen/image/"+this.sourceValue+"/"
+      var p = "gen/image/"+this.sourceValue+"/"
       for(var i=0;i<this.imageSrc.length;i++){
         var targetDay = moment(this.dateSelect, "YYYY-MM-DD");
         targetDay.add(i, 'days');
