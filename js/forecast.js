@@ -8,6 +8,7 @@ var g_Forecast = new Vue({
   		{name: "GTx+AI", value: "corrected"},
   	],
     dateSelect: "2017-12-01",
+    forecastDate: ["","",""],
     imageSrc:{
       "observe":["","",""],
       "forecast":["","",""],
@@ -38,7 +39,9 @@ var g_Forecast = new Vue({
           var targetDay = moment(this.dateSelect, "YYYY-MM-DD");
           targetDay.add(i, 'days');
           var f = s+"_F"+(i+1)+"_";
-          f += targetDay.format("YYYY-MM-DD")+".jpg";
+          var dateStr = targetDay.format("YYYY-MM-DD")
+          this.forecastDate[i] = dateStr;
+          f += dateStr+".jpg";
           this.imageSrc[s][i] = p+f;
           //$("#F"+(i+1)).attr("src",p+f);
         }
@@ -57,7 +60,7 @@ window.addEventListener('load', function() {
     dots: true,
     infinite: false,
     speed: 700,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 10000,
     swipe: true,
     slidesToShow: 3,

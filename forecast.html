@@ -32,52 +32,52 @@
 				</ul>
 			</div>
 			
-			<div class="category">GTx - {{dateSelect}} 三日預報</div>
+			<div class="category">預報第一天 {{forecastDate[0]}}</div>
 			<div class="forecast-container slide-3col">
 				<div>
-					<div class="forecast-title">預報第一天</div>
+					<div class="forecast-title">GTx</div>
 					<img class="forecast-image" id="F1" v-bind:src="imageSrc['forecast'][0]">
 				</div>
 				<div>
-					<div class="forecast-title">預報第二天</div>
-					<img class="forecast-image" id="F2" v-bind:src="imageSrc['forecast'][1]">
+					<div class="forecast-title">GTx + AI</div>
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc['corrected'][0]">
 				</div>
 				<div>
-					<div class="forecast-title">預報第三天</div>
-					<img class="forecast-image" id="F3" v-bind:src="imageSrc['forecast'][2]">
+					<div class="forecast-title">觀測</div>
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc['observe'][0]">
 				</div>
 			</div>
 			<hr>
 
-			<div class="category">GTx + AI - {{dateSelect}} 三日預報</div>
+			<div class="category">預報第二天 {{forecastDate[1]}}</div>
 			<div class="forecast-container slide-3col">
 				<div>
-					<div class="forecast-title">預報第一天</div>
-					<img class="forecast-image" id="F1" v-bind:src="imageSrc['corrected'][0]">
+					<div class="forecast-title">GTx</div>
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc['forecast'][1]">
 				</div>
 				<div>
-					<div class="forecast-title">預報第二天</div>
+					<div class="forecast-title">GTx + AI</div>
 					<img class="forecast-image" id="F2" v-bind:src="imageSrc['corrected'][1]">
 				</div>
 				<div>
-					<div class="forecast-title">預報第三天</div>
-					<img class="forecast-image" id="F3" v-bind:src="imageSrc['corrected'][2]">
+					<div class="forecast-title">觀測</div>
+					<img class="forecast-image" id="F3" v-bind:src="imageSrc['observe'][1]">
 				</div>
 			</div>
 			<hr>
 
-			<div class="category">觀測結果 - {{dateSelect}} 三日觀測</div>
+			<div class="category">預報第三天 {{forecastDate[2]}}</div>
 			<div class="forecast-container slide-3col">
 				<div>
-					<div class="forecast-title">觀測第一天</div>
-					<img class="forecast-image" id="F1" v-bind:src="imageSrc['observe'][0]">
+					<div class="forecast-title">GTx</div>
+					<img class="forecast-image" id="F1" v-bind:src="imageSrc['forecast'][2]">
 				</div>
 				<div>
-					<div class="forecast-title">觀測第二天</div>
-					<img class="forecast-image" id="F2" v-bind:src="imageSrc['observe'][1]">
+					<div class="forecast-title">GTx + AI</div>
+					<img class="forecast-image" id="F2" v-bind:src="imageSrc['corrected'][2]">
 				</div>
 				<div>
-					<div class="forecast-title">觀測第三天</div>
+					<div class="forecast-title">觀測</div>
 					<img class="forecast-image" id="F3" v-bind:src="imageSrc['observe'][2]">
 				</div>
 			</div>
@@ -96,6 +96,6 @@
 	    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	    <script src="js/moment.min.js"></script>
 	    <script src="js/util.js?v=1.0.0"></script>
-	    <script src="js/forecast.js?v=1.0.1"></script>
+	    <script src="js/forecast.js?v=1.0.2"></script>
 	</body>
 </html>
