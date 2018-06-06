@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Emission Estimation</title>
+	    <meta charset="utf-8">
+	    <script src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+	    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+        <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css"/>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+	    <link rel="stylesheet" type="text/css" href="build/css/main.css?v=1.0.1">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<div class="analysis" id="analysis">
+			<div class="topbar">
+				<div class="title"><a href="./">空汙排放推估</a></div>
+				<div class="top-nav">
+					<ul>
+						<li><a href="about.html">關於本站</a></li>
+						<li><a href="forecast.html">預報實驗</a></li>
+						<li><a href="analysis.html">空汙分析</a></li>
+					</ul>
+				</div>
+				<div class="top-menu">
+					<img src="image/menu-button.svg">
+				</div>
+			</div>
+			<div class="bar-padding"></div>
+			<div class="toggle-menu">
+				<ul>
+					<li><a href="about.html">關於本站</a></li>
+					<li><a href="forecast.html">預報實驗</a></li>
+					<li><a href="analysis.html">空汙分析</a></li>
+				</ul>
+			</div>
+			
+			<div class="category">分析日期 {{dateSelect}}</div>
+			<div class="analysis-container slide-3col">
+				<div>
+					<div class="center">
+						類別<select v-model="catIndex[0]" v-on:change="ChangeCategory(0);">
+							<option v-for="(s,i) in sourceList" v-bind:value="i">{{s.category}}</option>
+						</select><br>
+						項目<select v-model="itemIndex[0]" v-on:change="ChangeItem(0);">
+							<option v-for="(item,i) in sourceList[catIndex[0]].item" v-bind:value="i">{{item.name}}</option>
+						</select>
+					</div>
+					<div class="map-div" id="mapA1"></div>
+				</div>
+				<div>
+					<div class="center">
+						類別<select v-model="catIndex[1]" v-on:change="ChangeCategory(1);">
+							<option v-for="(s,i) in sourceList" v-bind:value="i">{{s.category}}</option>
+						</select><br>
+						項目<select v-model="itemIndex[1]" v-on:change="ChangeItem(1);">
+							<option v-for="(item,i) in sourceList[catIndex[1]].item" v-bind:value="i">{{item.name}}</option>
+						</select>
+					</div>
+					<div class="map-div" id="mapA2"></div>
+				</div>
+				<div>
+					<div class="center">
+						類別<select v-model="catIndex[2]" v-on:change="ChangeCategory(2);">
+							<option v-for="(s,i) in sourceList" v-bind:value="i">{{s.category}}</option>
+						</select><br>
+						項目<select v-model="itemIndex[2]" v-on:change="ChangeItem(2);">
+							<option v-for="(item,i) in sourceList[catIndex[2]].item" v-bind:value="i">{{item.name}}</option>
+						</select>
+					</div>
+					<div class="map-div" id="mapA3"></div>
+				</div>
+
+			</div>
+			<div class="bar-padding"></div>
+			<div class="control-bar center">
+				<div class="inline-block">
+					日期: <input type="date" min="2017-01-01" v-model="dateSelect" v-on:input="ChangeDate">
+				</div>
+				<div class="inline-block">
+					透明度<input type="range" min="0" max="1" step="0.1" v-model="opacity" v-on:input="UpdateImage">
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js"></script>
+	    <script src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=false&key=AIzaSyBUGDJex2sQeScb1Wxcm7oiPGwdmyoLhHM"></script>
+	    
+	    <!--<script src="https://unpkg.com/vue"></script>-->
+	    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	    <script src="js/moment.min.js"></script>
+	    <script src="js/util.js?v=1.0.0"></script>
+	    <script src="js/USGSOverlay.js?v=1.0.0"></script>
+	    <script src="js/analysis.js?v=1.0.0"></script>
+	</body>
+</html>
